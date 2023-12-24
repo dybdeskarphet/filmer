@@ -21,16 +21,18 @@ const SearchButton = () => {
   );
 };
 
-const Header = ({ title, buttons }) => {
+const Header = ({ title, buttons = [] }) => {
   let buttonComponents = [];
 
-  buttons.forEach((button) => {
-    switch (button) {
-      case "search":
-        buttonComponents.push(<SearchButton />);
-        break;
-    }
-  });
+  if (buttons.length > 0) {
+    buttons.forEach((button) => {
+      switch (button) {
+        case "search":
+          buttonComponents.push(<SearchButton />);
+          break;
+      }
+    });
+  }
 
   return (
     <View style={styles.container}>

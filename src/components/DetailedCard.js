@@ -56,6 +56,8 @@ const styles = StyleSheet.create({
     borderRadius: sizes.radiusBig,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.dark2,
   },
   textContainer: {
     flexDirection: "column",

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   createNativeStackNavigator,
   TransitionPresets,
@@ -10,9 +11,27 @@ import DetailsScreen from "./src/screens/DetailsScreen";
 import "./src/config";
 import { MovieProvider } from "./src/context/MovieContext";
 import SearchScreen from "./src/screens/SearchScreen";
+import HomeTabBar from "./src/components/tabbars/HomeTabBar";
+import ProfileScreen from "./src/screens/ProfileScreen";
 
 const { colors } = global.config.style;
 const Stack = createNativeStackNavigator();
+
+const HomeTab = createBottomTabNavigator();
+
+const HomeTabs = () => {
+  return (
+    <HomeTab.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      tabBar={(props) => <HomeTabBar {...props} />}
+    >
+      <HomeTab.Screen name="Home" component={HomeScreen} />
+      <HomeTab.Screen name="Profile" component={ProfileScreen} />
+    </HomeTab.Navigator>
+  );
+};
 
 const App = () => {
   return (
@@ -35,11 +54,9 @@ const App = () => {
             }}
           >
             <Stack.Screen
-              options={{
-                headerShown: false,
-              }}
-              name="Home"
-              component={HomeScreen}
+              options={{ headerShown: false }}
+              name="HomeTabs"
+              component={HomeTabs}
             />
             <Stack.Screen
               options={{ title: "Movie Details" }}

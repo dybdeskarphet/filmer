@@ -14,6 +14,7 @@ module.exports = global.config = {
     sizes: {
       radiusBig: 25,
       radius: 20,
+      tabbarSpace: 70,
     },
   },
 };

@@ -210,6 +210,7 @@ const HomeScreen = () => {
             );
           })}
         </View>
+        <View style={{ marginBottom: sizes.tabbarSpace }} />
       </CollapsibleHeaderScrollView>
     </CustomSafeAreaView>
   );

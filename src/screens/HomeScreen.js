@@ -1,5 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, ScrollView, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  ScrollView,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import "../config";
 import SimpleCard from "../components/SimpleCard";
 import tmdbApi from "../api/tmdb";
@@ -8,8 +15,10 @@ import MovieContext from "../context/MovieContext";
 import DetailedCard from "../components/DetailedCard";
 import { CollapsibleHeaderScrollView } from "react-native-collapsible-header-views";
 import Header from "../components/Header";
+import { useNavigation } from "@react-navigation/core";
+import { Entypo } from "@expo/vector-icons";
 
-const { colors } = global.config.style;
+const { colors, sizes } = global.config.style;
 
 const PopularMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -56,6 +65,21 @@ const PopularMovies = () => {
   );
 };
 
+const ShowMore = ({ list, navigateTo }) => {
+  const navigation = useNavigation();
+
+  if (list.length > 3) {
+    return (
+      <TouchableOpacity
+        style={showMore.container}
+        onPress={() => navigation.navigate(navigateTo)}
+      >
+        <Entypo name="dots-three-horizontal" size={24} color={colors.light2} />
+      </TouchableOpacity>
+    );
+  }
+};
+
 const WillWatch = ({ willWatchList }) => {
   const [willWatchMovies, setWillWatchMovies] = useState([]);
 
@@ -82,21 +106,25 @@ const WillWatch = ({ willWatchList }) => {
   return (
     <View>
       <TitleText style={willWatch.title} text="Will Watch" />
-      {willWatchMovies.map((item, index) => (
-        <React.Fragment key={index}>
-          <DetailedCard
-            id={item.id}
-            desc={item.overview}
-            title={item.title}
-            voteAverage={item.vote_average}
-            image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
-          />
+      {willWatchMovies
+        .reverse()
+        .slice(0, 3)
+        .map((item, index) => (
+          <React.Fragment key={index}>
+            <DetailedCard
+              id={item.id}
+              desc={item.overview}
+              title={item.title}
+              voteAverage={item.vote_average}
+              image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+            />
 
-          {index !== willWatchMovies.length - 1 && (
-            <View style={{ margin: 6 }} />
-          )}
-        </React.Fragment>
-      ))}
+            {index !== willWatchMovies.length - 1 && (
+              <View style={{ margin: 6 }} />
+            )}
+          </React.Fragment>
+        ))}
+      <ShowMore list={willWatchMovies} navigateTo={"Profile"} />
     </View>
   );
 };
@@ -127,19 +155,25 @@ const Watched = ({ watchedList }) => {
   return (
     <View>
       <TitleText style={watched.title} text="Watched" />
-      {watchedMovies.map((item, index) => (
-        <React.Fragment key={index}>
-          <DetailedCard
-            id={item.id}
-            desc={item.overview}
-            title={item.title}
-            voteAverage={item.vote_average}
-            image={`https://image.tmdb.org/t/p/w154/${item.poster_path}`}
-          />
+      {watchedMovies
+        .reverse()
+        .slice(0, 3)
+        .map((item, index) => (
+          <React.Fragment key={index}>
+            <DetailedCard
+              id={item.id}
+              desc={item.overview}
+              title={item.title}
+              voteAverage={item.vote_average}
+              image={`https://image.tmdb.org/t/p/w154/${item.poster_path}`}
+            />
 
-          {index !== watchedMovies.length - 1 && <View style={{ margin: 6 }} />}
-        </React.Fragment>
-      ))}
+            {index !== watchedMovies.length - 1 && (
+              <View style={{ margin: 6 }} />
+            )}
+          </React.Fragment>
+        ))}
+      <ShowMore list={watchedMovies} navigateTo={"Profile"} />
     </View>
   );
 };
@@ -154,25 +188,27 @@ const HomeScreen = () => {
   ];
 
   return (
-    <CollapsibleHeaderScrollView
-      CollapsibleHeaderComponent={<Header title="Filmer" searchButton={true} />}
-      headerHeight={60}
-      showsVerticalScrollIndicator={false}
-      statusBarHeight={Platform.OS === "ios" ? 20 : 0}
-      headerContainerBackgroundColor={colors.dark1}
-      style={screen.container}
-    >
-      <PopularMovies />
-      <View style={screen.otherSections}>
-        {components.map((item, key) => {
-          return (
-            <View key={key} style={{ marginBottom: 15 }}>
-              {item}
-            </View>
-          );
-        })}
-      </View>
-    </CollapsibleHeaderScrollView>
+      <CollapsibleHeaderScrollView
+        CollapsibleHeaderComponent={
+          <Header title="Filmer" searchButton={true} />
+        }
+        headerHeight={60}
+        showsVerticalScrollIndicator={false}
+        statusBarHeight={Platform.OS === "ios" ? 20 : 0}
+        headerContainerBackgroundColor={colors.dark1}
+        style={screen.container}
+      >
+        <PopularMovies />
+        <View style={screen.otherSections}>
+          {components.map((item, key) => {
+            return (
+              <View key={key} style={{ marginBottom: 15 }}>
+                {item}
+              </View>
+            );
+          })}
+        </View>
+      </CollapsibleHeaderScrollView>
   );
 };
 
@@ -208,6 +244,16 @@ const watched = StyleSheet.create({
 const listStyles = StyleSheet.create({
   flatlistContainer: {
     paddingLeft: 15,
+  },
+});
+
+const showMore = StyleSheet.create({
+  container: {
+    backgroundColor: colors.dark0,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: sizes.radius,
   },
 });
 

@@ -83,8 +83,6 @@ const DetailsScreen = ({ route }) => {
     </View>,
   ];
 
-  console.log(releaseDate);
-
   const FilmOverview = () => {
     return (
       <View style={filmOverview.container}>

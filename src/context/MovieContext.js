@@ -66,7 +66,6 @@ export const MovieProvider = ({ children }) => {
       try {
         await AsyncStorage.setItem("movieLists", JSON.stringify(state));
         const storedData = await AsyncStorage.getItem("movieLists");
-        console.log("Stored Data:", storedData);
       } catch (error) {
         console.error("Error saving data to AsyncStorage:", error);
       }

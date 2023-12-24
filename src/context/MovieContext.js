@@ -11,12 +11,23 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "ADD_TO_WILL_WATCH":
-      return {
-        ...state,
-        willWatchList: [...state.willWatchList, action.payload],
-      };
+      // Check for duplicate item before adding to the list
+      if (!state.willWatchList.includes(action.payload)) {
+        return {
+          ...state,
+          willWatchList: [...state.willWatchList, action.payload],
+        };
+      }
+      return state;
     case "ADD_TO_WATCHED":
-      return { ...state, watchedList: [...state.watchedList, action.payload] };
+      // Check for duplicate item before adding to the list
+      if (!state.watchedList.includes(action.payload)) {
+        return {
+          ...state,
+          watchedList: [...state.watchedList, action.payload],
+        };
+      }
+      return state;
     case "REMOVE_FROM_WILL_WATCH":
       return {
         ...state,
@@ -29,6 +40,8 @@ const reducer = (state, action) => {
         ...state,
         watchedList: state.watchedList.filter((id) => id !== action.payload),
       };
+    case "INITIALIZE_STATE":
+      return action.payload; // Use the payload as the new state
     default:
       return state;
   }

@@ -192,7 +192,7 @@ const HomeScreen = () => {
     <CustomSafeAreaView>
       <CollapsibleHeaderScrollView
         CollapsibleHeaderComponent={
-          <Header title="Filmer" buttonsa={["search"]} />
+          <Header title="Filmer" buttons={["search"]} />
         }
         headerHeight={60}
         showsVerticalScrollIndicator={false}

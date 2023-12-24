@@ -12,6 +12,7 @@ import DetailedCard from "../components/DetailedCard";
 import tmdbApi, { searchMovies } from "../api/tmdb";
 import { Feather } from "@expo/vector-icons";
 import "../config";
+import CustomSafeAreaView from "../components/CustomSafeAreaView";
 
 const { colors, sizes } = global.config.style;
 
@@ -46,49 +47,51 @@ const SearchScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {searchQuery == "" && searchResults.length == 0 ? (
-        <EmptySearchPlaceholder />
-      ) : (
-        // If you move this FlatList to another component, keyboard closes on every keystroke.
-        <FlatList
-          data={searchResults}
-          contentContainerStyle={{ paddingTop: 70 }}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item, index }) => {
-            return (
-              <React.Fragment>
-                <DetailedCard
-                  id={item.id}
-                  image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
-                  title={item.title}
-                  desc={item.overview}
-                  voteAverage={item.vote_average}
-                />
+    <CustomSafeAreaView>
+      <View style={styles.container}>
+        {searchQuery == "" && searchResults.length == 0 ? (
+          <EmptySearchPlaceholder />
+        ) : (
+          // If you move this FlatList to another component, keyboard closes on every keystroke.
+          <FlatList
+            data={searchResults}
+            contentContainerStyle={{ paddingTop: 70 }}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item, index }) => {
+              return (
+                <React.Fragment>
+                  <DetailedCard
+                    id={item.id}
+                    image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+                    title={item.title}
+                    desc={item.overview}
+                    voteAverage={item.vote_average}
+                  />
 
-                {index !== searchResults.length - 1 && (
-                  <View style={{ margin: 6 }} />
-                )}
-              </React.Fragment>
-            );
-          }}
-        />
-      )}
-      <View style={styles.searchInputContainer}>
-        <TextInput
-          style={styles.searchInput}
-          cursorColor={colors.light2}
-          placeholder="Search for movies..."
-          placeholderTextColor={colors.light3}
-          value={searchQuery}
-          onChangeText={(text) => setSearchQuery(text)}
-          onSubmitEditing={handleSearch}
-        />
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Feather name="search" size={24} color={colors.light2} />
-        </TouchableOpacity>
+                  {index !== searchResults.length - 1 && (
+                    <View style={{ margin: 6 }} />
+                  )}
+                </React.Fragment>
+              );
+            }}
+          />
+        )}
+        <View style={styles.searchInputContainer}>
+          <TextInput
+            style={styles.searchInput}
+            cursorColor={colors.light2}
+            placeholder="Search for movies..."
+            placeholderTextColor={colors.light3}
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+            onSubmitEditing={handleSearch}
+          />
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+            <Feather name="search" size={24} color={colors.light2} />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </CustomSafeAreaView>
   );
 };
 

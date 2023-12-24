@@ -11,6 +11,7 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import MovieContext from "../context/MovieContext";
 import tmdbApi from "../api/tmdb"; // Import your API module
+import CustomSafeAreaView from "../components/CustomSafeAreaView";
 
 const { colors, sizes } = global.config.style;
 
@@ -168,13 +169,15 @@ const DetailsScreen = ({ route }) => {
   const components = [<FilmOverview key="filmOverview" />, <BottomSection />];
 
   return (
-    <ScrollView style={screen.container}>
-      {components.map((item, key) => (
-        <View style={{ marginBottom: 15 }} key={key}>
-          {item}
-        </View>
-      ))}
-    </ScrollView>
+    <CustomSafeAreaView>
+      <ScrollView style={screen.container}>
+        {components.map((item, key) => (
+          <View style={{ marginBottom: 15 }} key={key}>
+            {item}
+          </View>
+        ))}
+      </ScrollView>
+    </CustomSafeAreaView>
   );
 };
 

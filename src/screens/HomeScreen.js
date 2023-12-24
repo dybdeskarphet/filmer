@@ -17,6 +17,7 @@ import { CollapsibleHeaderScrollView } from "react-native-collapsible-header-vie
 import Header from "../components/Header";
 import { useNavigation } from "@react-navigation/core";
 import { Entypo } from "@expo/vector-icons";
+import CustomSafeAreaView from "../components/CustomSafeAreaView";
 
 const { colors, sizes } = global.config.style;
 
@@ -188,6 +189,7 @@ const HomeScreen = () => {
   ];
 
   return (
+    <CustomSafeAreaView>
       <CollapsibleHeaderScrollView
         CollapsibleHeaderComponent={
           <Header title="Filmer" searchButton={true} />
@@ -209,6 +211,7 @@ const HomeScreen = () => {
           })}
         </View>
       </CollapsibleHeaderScrollView>
+    </CustomSafeAreaView>
   );
 };
 

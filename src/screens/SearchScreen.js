@@ -62,10 +62,6 @@ const SearchScreen = () => {
                 <React.Fragment>
                   <DetailedCard
                     id={item.id}
-                    image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
-                    title={item.title}
-                    desc={item.overview}
-                    voteAverage={item.vote_average}
                   />
 
                   {index !== searchResults.length - 1 && (

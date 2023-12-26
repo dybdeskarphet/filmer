@@ -24,6 +24,10 @@ const HomeTabBar = ({ state, descriptors, navigation }) => {
                 break;
               case "Profile":
                 icon = "person";
+                break;
+              case "Discover":
+                icon = "compass";
+                break;
             }
 
             if (!isFocused) {

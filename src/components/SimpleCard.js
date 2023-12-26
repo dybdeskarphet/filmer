@@ -13,7 +13,7 @@ const SimpleCard = ({ id, image, title }) => {
     <TouchableOpacity
       style={styles.container}
       onPress={() =>
-        navigation.navigate("Details", {
+        navigation.push("Details", {
           id,
         })
       }

@@ -6,12 +6,14 @@ import {
   Text,
   StyleSheet,
   Image,
-  Button,
+  FlatList,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import MovieContext from "../context/MovieContext";
 import tmdbApi from "../api/tmdb"; // Import your API module
 import CustomSafeAreaView from "../components/CustomSafeAreaView";
+import TitleText from "../components/TitleText";
+import SimpleCard from "../components/SimpleCard";
 
 const { colors, sizes } = global.config.style;
 
@@ -24,6 +26,9 @@ const DetailsScreen = ({ route }) => {
   } = useContext(MovieContext);
 
   const [movieDetails, setMovieDetails] = useState(null);
+  const [recommendedMovies, setRecommendedMovies] = useState(null);
+  const [images, setImages] = useState(null);
+  const [imageViewVisible, setImageViewVisible] = useState(false);
   const isInitialLoad = useRef(true);
 
   const { id } = route.params;
@@ -44,6 +49,38 @@ const DetailsScreen = ({ route }) => {
 
     fetchMovieDetails();
   }, []);
+
+  useEffect(() => {
+    const fetchRecommendedMovies = async () => {
+      try {
+        const response = await tmdbApi.get(`movie/${id}/recommendations`);
+        if (response.data.results != null) {
+          setRecommendedMovies(response.data.results);
+        }
+      } catch (error) {
+        console.error("Error fetching recommended movies:", error);
+      }
+    };
+
+    fetchRecommendedMovies();
+  }, []);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await tmdbApi.get(`movie/${id}/images`);
+        if (response.data.backdrops != null) {
+          setImages(response.data.backdrops);
+        }
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  console.log(images);
 
   if (!movieDetails) {
     // Display a loading indicator or handle loading state
@@ -69,9 +106,7 @@ const DetailsScreen = ({ route }) => {
 
   const posterSize = "w500"; // Choose the appropriate size
 
-  const image = posterPath
-    ? `${baseImageUrl}${posterSize}/${posterPath}`
-    : null;
+  let image = posterPath ? `${baseImageUrl}${posterSize}/${posterPath}` : null;
 
   const icons = [
     <View style={filmOverview.icon.container} key="star">
@@ -98,6 +133,9 @@ const DetailsScreen = ({ route }) => {
         )}
         <Text style={filmOverview.desc}>{overview}</Text>
         <View style={filmOverview.iconsContainer}>{icons}</View>
+        <View style={filmOverview.bottomSectionContainer}>
+          <BottomSection />
+        </View>
       </View>
     );
   };
@@ -116,10 +154,7 @@ const DetailsScreen = ({ route }) => {
     };
 
     return (
-      <TouchableOpacity
-        style={bottomSection.watchedButton}
-        onPress={addOrRemove}
-      >
+      <TouchableOpacity style={bottomSection.willWatch} onPress={addOrRemove}>
         <FontAwesome name={icon} size={28} color={colors.red} />
         <Text style={bottomSection.watchedText}>Save</Text>
       </TouchableOpacity>
@@ -166,16 +201,92 @@ const DetailsScreen = ({ route }) => {
     );
   };
 
-  const components = [<FilmOverview key="filmOverview" />, <BottomSection />];
+  const MovieImages = () => {
+    let imageViewList = [
+      "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
+    ];
+
+    return (
+      <View>
+        <View style={{ marginBottom: 15, marginHorizontal: 15 }}>
+          <TitleText text="Images" />
+        </View>
+        <FlatList
+          data={images}
+          keyExtractor={(item) => item.file_path.toString()}
+          horizontal
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, key }) => {
+            return (
+              <TouchableOpacity
+                key={key}
+                onPress={() => setImageViewVisible(true)}
+              >
+                <Image
+                  style={movieImages.image}
+                  source={{
+                    uri: `https://image.tmdb.org/t/p/w500${item.file_path}`,
+                  }}
+                />
+              </TouchableOpacity>
+            );
+          }}
+        />
+      </View>
+    );
+  };
+
+  const Recommended = () => {
+    if (recommendedMovies != null && recommendedMovies.length > 0) {
+      return (
+        <View>
+          <View style={{ marginBottom: 15, marginHorizontal: 15 }}>
+            <TitleText text="Recommended" />
+          </View>
+          <FlatList
+            data={recommendedMovies}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            contentContainerStyle={{ paddingHorizontal: 15 }}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, key }) => (
+              <SimpleCard
+                key={key}
+                id={item.id}
+                title={item.title}
+                image={`https://image.tmdb.org/t/p/w500/${
+                  item.poster_path || item.backdrop_path
+                }`}
+              />
+            )}
+          />
+        </View>
+      );
+    }
+  };
+
+  const components = [<FilmOverview />];
+
+  const otherComponents = [<MovieImages />, <Recommended />];
 
   return (
     <CustomSafeAreaView>
-      <ScrollView style={screen.container}>
-        {components.map((item, key) => (
-          <View style={{ marginBottom: 15 }} key={key}>
-            {item}
-          </View>
-        ))}
+      <ScrollView>
+        <View style={screen.container}>
+          {components.map((item, key) => (
+            <View style={{ marginBottom: 15 }} key={key}>
+              {item}
+            </View>
+          ))}
+        </View>
+        <View style={screen.otherContainer}>
+          {otherComponents.map((item, key) => (
+            <View style={{ marginBottom: 15 }} key={key}>
+              {item}
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </CustomSafeAreaView>
   );
@@ -187,6 +298,10 @@ const screen = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: colors.dark1,
   },
+  otherContainer: {
+    flex: 1,
+    backgroundColor: colors.dark1,
+  },
 });
 
 const bottomSection = StyleSheet.create({
@@ -195,7 +310,7 @@ const bottomSection = StyleSheet.create({
     alignItems: "center",
   },
   willWatch: {
-    backgroundColor: colors.dark2,
+    backgroundColor: colors.dark1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -204,7 +319,7 @@ const bottomSection = StyleSheet.create({
     borderRadius: sizes.radius,
   },
   watchedButton: {
-    backgroundColor: colors.dark2,
+    backgroundColor: colors.dark1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -233,11 +348,25 @@ const loading = StyleSheet.create({
   },
 });
 
+const movieImages = StyleSheet.create({
+  image: {
+    width: 355,
+    height: 200,
+    borderRadius: sizes.radius,
+    marginRight: 20,
+    borderWidth: 1,
+    borderColor: `${colors.light3}cc`,
+  },
+});
+
 const filmOverview = StyleSheet.create({
   container: {
     padding: 15,
-    backgroundColor: colors.dark2,
+    backgroundColor: colors.dark0,
     borderRadius: sizes.radiusBig,
+  },
+  bottomSectionContainer: {
+    marginTop: 15,
   },
   image: {
     height: 450,

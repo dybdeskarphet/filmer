@@ -13,6 +13,8 @@ import { MovieProvider } from "./src/context/MovieContext";
 import SearchScreen from "./src/screens/SearchScreen";
 import HomeTabBar from "./src/components/tabbars/HomeTabBar";
 import ProfileScreen from "./src/screens/ProfileScreen";
+import DiscoverScreen from "./src/screens/DiscoverScreen";
+import WatchedScreen from "./src/screens/WatchedScreen";
 
 const { colors } = global.config.style;
 const Stack = createNativeStackNavigator();
@@ -28,7 +30,7 @@ const HomeTabs = () => {
       tabBar={(props) => <HomeTabBar {...props} />}
     >
       <HomeTab.Screen name="Home" component={HomeScreen} />
-      <HomeTab.Screen name="Profile" component={ProfileScreen} />
+            <HomeTab.Screen name="Profile" component={ProfileScreen} />
     </HomeTab.Navigator>
   );
 };
@@ -67,6 +69,11 @@ const App = () => {
               options={{ title: "Search Films" }}
               name="Search"
               component={SearchScreen}
+            />
+            <Stack.Screen
+              options={{ title: "Watched Films" }}
+              name="Watched"
+              component={WatchedScreen}
             />
           </Stack.Navigator>
         </View>

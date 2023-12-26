@@ -174,7 +174,7 @@ const Watched = ({ watchedList }) => {
             )}
           </React.Fragment>
         ))}
-      <ShowMore list={watchedMovies} navigateTo={"Profile"} />
+      <ShowMore list={watchedMovies} navigateTo={"Watched"} />
     </View>
   );
 };

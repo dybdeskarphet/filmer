@@ -81,6 +81,20 @@ const ShowMore = ({ list, navigateTo }) => {
   }
 };
 
+const AddMovies = ({ message, navigateTo }) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      style={addMovies.container}
+      onPress={() => navigation.navigate(navigateTo)}
+    >
+      <Entypo name="plus" size={36} color={`${colors.light3}cc`} />
+      <Text style={addMovies.message}>{message}</Text>
+    </TouchableOpacity>
+  );
+};
+
 const WillWatch = ({ willWatchList }) => {
   const [willWatchMovies, setWillWatchMovies] = useState([]);
 
@@ -107,24 +121,32 @@ const WillWatch = ({ willWatchList }) => {
   return (
     <View>
       <TitleText style={willWatch.title} text="Will Watch" />
-      {willWatchMovies
-        .reverse()
-        .slice(0, 3)
-        .map((item, index) => (
-          <React.Fragment key={index}>
-            <DetailedCard
-              id={item.id}
-              desc={item.overview}
-              title={item.title}
-              voteAverage={item.vote_average}
-              image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
-            />
 
-            {index !== willWatchMovies.length - 1 && (
-              <View style={{ margin: 6 }} />
-            )}
-          </React.Fragment>
-        ))}
+      {willWatchMovies.length > 0 ? (
+        willWatchMovies
+          .reverse()
+          .slice(0, 3)
+          .map((item, index) => (
+            <React.Fragment key={index}>
+              <DetailedCard
+                id={item.id}
+                desc={item.overview}
+                title={item.title}
+                voteAverage={item.vote_average}
+                image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+              />
+
+              {index !== willWatchMovies.length - 1 && (
+                <View style={{ margin: 6 }} />
+              )}
+            </React.Fragment>
+          ))
+      ) : (
+        <AddMovies
+          message="Save the movies you'll watch!"
+          navigateTo="Search"
+        />
+      )}
       <ShowMore list={willWatchMovies} navigateTo={"WillWatch"} />
     </View>
   );
@@ -156,25 +178,29 @@ const Watched = ({ watchedList }) => {
   return (
     <View>
       <TitleText style={watched.title} text="Watched" />
-      {watchedMovies
-        .reverse()
-        .slice(0, 3)
-        .map((item, index) => (
-          <React.Fragment key={index}>
-            <DetailedCard
-              id={item.id}
-              desc={item.overview}
-              title={item.title}
-              voteAverage={item.vote_average}
-              image={`https://image.tmdb.org/t/p/w154/${item.poster_path}`}
-            />
+      {watchedMovies.length > 0 ? (
+        watchedMovies
+          .reverse()
+          .slice(0, 3)
+          .map((item, index) => (
+            <React.Fragment key={index}>
+              <DetailedCard
+                id={item.id}
+                desc={item.overview}
+                title={item.title}
+                voteAverage={item.vote_average}
+                image={`https://image.tmdb.org/t/p/w154/${item.poster_path}`}
+              />
 
-            {index !== watchedMovies.length - 1 && (
-              <View style={{ margin: 6 }} />
-            )}
-          </React.Fragment>
-        ))}
-      <ShowMore list={watchedMovies} navigateTo={"Watched"} />
+              {index !== watchedMovies.length - 1 && (
+                <View style={{ margin: 6 }} />
+              )}
+            </React.Fragment>
+          ))
+      ) : (
+        <AddMovies message="Add your favorite movies!" navigateTo="Search" />
+      )}
+      <ShowMore list={watchedMovies} navigateTo="Watched" />
     </View>
   );
 };
@@ -258,6 +284,25 @@ const showMore = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: sizes.radius,
+  },
+});
+
+const addMovies = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    width: "100%",
+    height: 100,
+    backgroundColor: `${colors.dark0}cc`,
+    borderRadius: sizes.radiusBig,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: `${colors.dark2}cc`,
+  },
+  message: {
+    color: `${colors.light3}cc`,
+    fontSize: 13,
+    paddingLeft: 20,
   },
 });
 

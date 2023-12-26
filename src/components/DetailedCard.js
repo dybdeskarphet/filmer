@@ -11,6 +11,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import TextTicker from "react-native-text-ticker";
 import { useNavigation } from "@react-navigation/native";
 import { getMovieDetails } from "../api/tmdb"; // Import the function from tmdb.js
+import { Shadow } from "react-native-shadow-2";
 
 const { colors, sizes } = global.config.style;
 
@@ -38,7 +39,7 @@ const DetailedCard = ({ id }) => {
 
   if (isLoading) {
     return (
-      <View style={[styles.container, {height: 200 }]}>
+      <View style={[styles.container, { height: 200 }]}>
         <ActivityIndicator size="large" color={colors.light1} />
       </View>
     );
@@ -49,44 +50,46 @@ const DetailedCard = ({ id }) => {
   }
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => navigation.navigate("Details", { id })}
-    >
-      {filmDetails && filmDetails.poster_path && (
-        <Image
-          style={styles.image}
-          source={{
-            uri: `https://image.tmdb.org/t/p/w500${filmDetails.poster_path}`,
-          }}
-        />
-      )}
-      <View style={styles.textContainer}>
-        <View style={styles.titleContainer}>
-          <View style={{ flex: 1 }}>
-            <TextTicker
-              duration={6000}
-              loop
-              bounce
-              repeatSpacer={50}
-              marqueeDelay={2500}
-              style={styles.title}
-            >
-              {filmDetails ? filmDetails.title : ""}
-            </TextTicker>
+    <Shadow>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => navigation.navigate("Details", { id })}
+      >
+        {filmDetails && filmDetails.poster_path && (
+          <Image
+            style={styles.image}
+            source={{
+              uri: `https://image.tmdb.org/t/p/w500${filmDetails.poster_path}`,
+            }}
+          />
+        )}
+        <View style={styles.textContainer}>
+          <View style={styles.titleContainer}>
+            <View style={{ flex: 1 }}>
+              <TextTicker
+                duration={6000}
+                loop
+                bounce
+                repeatSpacer={50}
+                marqueeDelay={2500}
+                style={styles.title}
+              >
+                {filmDetails ? filmDetails.title : ""}
+              </TextTicker>
+            </View>
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingText}>
+                {filmDetails ? filmDetails.vote_average.toFixed(1) : "0.0"}/10
+              </Text>
+              <FontAwesome name="star" size={22} color={colors.yellow} />
+            </View>
           </View>
-          <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>
-              {filmDetails ? filmDetails.vote_average.toFixed(1) : "0.0"}/10
-            </Text>
-            <FontAwesome name="star" size={22} color={colors.yellow} />
-          </View>
+          <Text numberOfLines={4} style={styles.desc}>
+            {filmDetails ? filmDetails.overview : ""}
+          </Text>
         </View>
-        <Text numberOfLines={4} style={styles.desc}>
-          {filmDetails ? filmDetails.overview : ""}
-        </Text>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </Shadow>
   );
 };
 

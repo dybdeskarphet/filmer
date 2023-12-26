@@ -125,7 +125,7 @@ const WillWatch = ({ willWatchList }) => {
             )}
           </React.Fragment>
         ))}
-      <ShowMore list={willWatchMovies} navigateTo={"Profile"} />
+      <ShowMore list={willWatchMovies} navigateTo={"WillWatch"} />
     </View>
   );
 };

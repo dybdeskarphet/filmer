@@ -75,7 +75,7 @@ const ShowMore = ({ list, navigateTo }) => {
         style={showMore.container}
         onPress={() => navigation.navigate(navigateTo)}
       >
-        <Entypo name="dots-three-horizontal" size={24} color={colors.light2} />
+        <Text style={showMore.text}>Show {list.length - 3} more</Text>
       </TouchableOpacity>
     );
   }
@@ -279,11 +279,15 @@ const listStyles = StyleSheet.create({
 
 const showMore = StyleSheet.create({
   container: {
-    backgroundColor: colors.dark0,
+    backgroundColor: `${colors.dark0}e6`,
     height: 40,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: sizes.radius,
+  },
+  text: {
+    color: `${colors.light3}`,
+    fontSize: 12,
   },
 });
 

@@ -1,31 +1,81 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import React from "react";
-import { Feather } from "@expo/vector-icons";
+import React, { useState, useEffect, useContext } from "react";
+import { View, TextInput, FlatList, StyleSheet, Text } from "react-native";
+import MovieContext from "../context/MovieContext";
+import { getMovieDetails } from "../api/tmdb";
+import DetailedCard from "../components/DetailedCard";
 
 const { colors, sizes } = global.config.style;
 
 const WatchedScreen = () => {
+  const [query, setQuery] = useState("");
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { state } = useContext(MovieContext);
+  const { watchedList } = state;
+
+  const fetchWatchedMoviesDetails = async () => {
+    setIsLoading(true);
+    try {
+      const movieDetailsPromises = watchedList.map((id) => getMovieDetails(id));
+      const moviesDetails = await Promise.all(movieDetailsPromises);
+      setFilteredMovies(moviesDetails);
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWatchedMoviesDetails();
+  }, [watchedList]);
+
+  const handleSearch = (text) => {
+    setQuery(text);
+    if (text) {
+      const lowerCaseQuery = text.toLowerCase();
+      const searchedMovies = filteredMovies.filter((movie) =>
+        movie.title.toLowerCase().includes(lowerCaseQuery)
+      );
+      setFilteredMovies(searchedMovies);
+    } else {
+      // Fetch details for all movies in watchedList again
+      fetchWatchedMoviesDetails();
+    }
+  };
+
   return (
     <View style={styles.container}>
+      {isLoading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <FlatList
+          data={filteredMovies}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 70, paddingBottom: 20 }}
+          renderItem={({ item, index }) => {
+            return (
+              <React.Fragment>
+                <DetailedCard id={item.id} />
+
+                {index !== filteredMovies.length - 1 && (
+                  <View style={{ margin: 6 }} />
+                )}
+              </React.Fragment>
+            );
+          }}
+        />
+      )}
       <View style={styles.searchInputContainer}>
         <TextInput
           style={styles.searchInput}
-          cursorColor={colors.light2}
-          placeholder="Search for movies..."
+          placeholder="Search your movies..."
           placeholderTextColor={colors.light3}
-          value={""}
-          onChangeText={""}
-          onSubmitEditing={""}
+          cursorColor={colors.light2}
+          value={query}
+          onChangeText={handleSearch}
         />
-        <TouchableOpacity style={styles.searchButton} onPress={""}>
-          <Feather name="search" size={24} color={colors.light2} />
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -33,10 +83,9 @@ const WatchedScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.dark1,
     flex: 1,
+    backgroundColor: colors.dark1,
     paddingHorizontal: 15,
-    paddingTop: 16,
   },
   searchInputContainer: {
     position: "absolute",
@@ -55,15 +104,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   searchInput: {
-    width: "80%",
+    width: "100%",
     paddingVertical: 7.5,
     color: colors.light1,
-  },
-  searchButton: {
-    width: "20%",
-    height: "100%",
-    alignItems: "flex-end",
-    justifyContent: "center",
   },
 });
 

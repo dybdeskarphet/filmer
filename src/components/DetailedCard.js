@@ -1,21 +1,65 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import TextTicker from "react-native-text-ticker";
 import { useNavigation } from "@react-navigation/native";
+import { getMovieDetails } from "../api/tmdb"; // Import the function from tmdb.js
 
 const { colors, sizes } = global.config.style;
 
-const DetailedCard = ({ id, image, title, desc, voteAverage }) => {
+const DetailedCard = ({ id }) => {
   const navigation = useNavigation();
+  const [filmDetails, setFilmDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchFilmDetails = async () => {
+      try {
+        const data = await getMovieDetails(id);
+        setFilmDetails(data);
+      } catch (error) {
+        setError("Failed to fetch film details.");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFilmDetails();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, {height: 200 }]}>
+        <ActivityIndicator size="large" color={colors.light1} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
 
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => navigation.navigate("Details", { id })}
     >
-      {image != "https://image.tmdb.org/t/p/w500/null" && (
-        <Image style={styles.image} source={{ uri: image }} />
+      {filmDetails && filmDetails.poster_path && (
+        <Image
+          style={styles.image}
+          source={{
+            uri: `https://image.tmdb.org/t/p/w500${filmDetails.poster_path}`,
+          }}
+        />
       )}
       <View style={styles.textContainer}>
         <View style={styles.titleContainer}>
@@ -28,16 +72,18 @@ const DetailedCard = ({ id, image, title, desc, voteAverage }) => {
               marqueeDelay={2500}
               style={styles.title}
             >
-              {title}
+              {filmDetails ? filmDetails.title : ""}
             </TextTicker>
           </View>
           <View style={styles.ratingContainer}>
-            <Text style={styles.ratingText}>{voteAverage.toFixed(1)}/10</Text>
+            <Text style={styles.ratingText}>
+              {filmDetails ? filmDetails.vote_average.toFixed(1) : "0.0"}/10
+            </Text>
             <FontAwesome name="star" size={22} color={colors.yellow} />
           </View>
         </View>
         <Text numberOfLines={4} style={styles.desc}>
-          {desc}
+          {filmDetails ? filmDetails.overview : ""}
         </Text>
       </View>
     </TouchableOpacity>
@@ -45,6 +91,8 @@ const DetailedCard = ({ id, image, title, desc, voteAverage }) => {
 };
 
 export default DetailedCard;
+
+// ... styles remain the same
 
 const styles = StyleSheet.create({
   container: {

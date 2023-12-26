@@ -30,7 +30,8 @@ const HomeTabs = () => {
       tabBar={(props) => <HomeTabBar {...props} />}
     >
       <HomeTab.Screen name="Home" component={HomeScreen} />
-            <HomeTab.Screen name="Profile" component={ProfileScreen} />
+      <HomeTab.Screen name="Discover" component={DiscoverScreen} />
+      <HomeTab.Screen name="Profile" component={ProfileScreen} />
     </HomeTab.Navigator>
   );
 };

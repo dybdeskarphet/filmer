@@ -57,8 +57,6 @@ const PopularMovies = () => {
           <SimpleCard
             key={key}
             id={item.id}
-            title={item.title}
-            image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
           />
         )}
       />

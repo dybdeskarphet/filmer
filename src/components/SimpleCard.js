@@ -1,13 +1,52 @@
-import React from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import TextTicker from "react-native-text-ticker";
+import { getMovieDetails } from "../api/tmdb"; // Import the function from tmdb.js
 
 const { colors, sizes } = global.config.style;
 
-const SimpleCard = ({ id, image, title }) => {
+const SimpleCard = ({ id }) => {
   const navigation = useNavigation();
+  const [filmDetails, setFilmDetails] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFilmDetails = async () => {
+      try {
+        const data = await getMovieDetails(id);
+        setFilmDetails(data);
+      } catch (error) {
+        setError("Failed to fetch film details.");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFilmDetails();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { height: 200 }]}>
+        <ActivityIndicator size="large" color={colors.light1} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
+  }
 
   return (
     <TouchableOpacity
@@ -18,7 +57,12 @@ const SimpleCard = ({ id, image, title }) => {
         })
       }
     >
-      <Image style={styles.image} source={{ uri: image }} />
+      <Image
+        style={styles.image}
+        source={{
+          uri: `https://image.tmdb.org/t/p/w500${filmDetails.poster_path}`,
+        }}
+      />
       <LinearGradient
         style={styles.titleGradient}
         colors={["#00000000", "#000000"]}
@@ -32,7 +76,7 @@ const SimpleCard = ({ id, image, title }) => {
             marqueeDelay={2500}
             style={styles.title}
           >
-            {title}
+            {filmDetails ? filmDetails.title : ""}
           </TextTicker>
         </View>
       </LinearGradient>

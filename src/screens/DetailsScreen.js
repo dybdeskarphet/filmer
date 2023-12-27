@@ -37,6 +37,7 @@ const DetailsScreen = ({ route }) => {
   const isOnWillWatchList = state.willWatchList.includes(id);
   const isOnWatchedList = state.watchedList.includes(id);
 
+  // Fetch the movie details for the FilmOverview component
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
@@ -50,6 +51,7 @@ const DetailsScreen = ({ route }) => {
     fetchMovieDetails();
   }, []);
 
+  // Fetch the recommended movies according to the selected movie
   useEffect(() => {
     const fetchRecommendedMovies = async () => {
       try {
@@ -65,6 +67,7 @@ const DetailsScreen = ({ route }) => {
     fetchRecommendedMovies();
   }, []);
 
+  // Fetch images of the movie
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -80,8 +83,6 @@ const DetailsScreen = ({ route }) => {
     fetchImages();
   }, []);
 
-  console.log(images);
-
   if (!movieDetails) {
     // Display a loading indicator or handle loading state
     return (
@@ -92,43 +93,45 @@ const DetailsScreen = ({ route }) => {
   }
 
   const {
-    poster_path: posterPath,
+    poster_path,
     title,
     overview,
-    release_date: releaseDate,
-    original_language: language,
+    release_date,
+    original_language,
     popularity,
-    vote_count: votes,
-    vote_average: voteAverage,
+    vote_count,
+    vote_average,
   } = movieDetails;
 
+  // Set image
   const baseImageUrl = "https://image.tmdb.org/t/p/";
-
   const posterSize = "w500"; // Choose the appropriate size
+  let image = poster_path
+    ? `${baseImageUrl}${posterSize}/${poster_path}`
+    : null;
 
-  let image = posterPath ? `${baseImageUrl}${posterSize}/${posterPath}` : null;
-
-  const icons = [
-    <View style={filmOverview.icon.container} key="star">
-      <FontAwesome name="star" size={24} color={colors.yellow} />
-      <Text style={filmOverview.icon.text}>{voteAverage.toFixed(1)}/10</Text>
-    </View>,
-    <View style={filmOverview.icon.container} key="user">
-      <FontAwesome name="user" size={24} color={colors.cyan} />
-      <Text style={filmOverview.icon.text}>{votes} votes</Text>
-    </View>,
-  ];
-
+  // Film overview, the first component
   const FilmOverview = () => {
+    const icons = [
+      <View style={filmOverview.icon.container} key="star">
+        <FontAwesome name="star" size={24} color={colors.yellow} />
+        <Text style={filmOverview.icon.text}>{vote_average.toFixed(1)}/10</Text>
+      </View>,
+      <View style={filmOverview.icon.container} key="user">
+        <FontAwesome name="user" size={24} color={colors.cyan} />
+        <Text style={filmOverview.icon.text}>{vote_count} votes</Text>
+      </View>,
+    ];
+
     return (
       <View style={filmOverview.container}>
-        {posterPath != null && (
+        {poster_path != null && (
           <Image style={filmOverview.image} source={{ uri: image }} />
         )}
         <Text style={filmOverview.title}>{title}</Text>
-        {releaseDate != "" && (
+        {release_date != "" && (
           <Text style={filmOverview.releaseDate}>
-            {releaseDate.match(/^(\d{4})/g)}
+            {release_date.match(/^(\d{4})/g)}
           </Text>
         )}
         <Text style={filmOverview.desc}>{overview}</Text>
@@ -140,52 +143,55 @@ const DetailsScreen = ({ route }) => {
     );
   };
 
-  const WillWatchButton = ({ add, remove }) => {
-    const [icon, setIcon] = useState(isOnWillWatchList ? "heart" : "heart-o");
-
-    const addOrRemove = () => {
-      if (isOnWillWatchList) {
-        setIcon("heart-o");
-        remove();
-      } else {
-        setIcon("heart");
-        add();
-      }
-    };
-
-    return (
-      <TouchableOpacity style={bottomSection.willWatch} onPress={addOrRemove}>
-        <FontAwesome name={icon} size={28} color={colors.red} />
-        <Text style={bottomSection.watchedText}>Save</Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const WatchedButton = ({ add, remove }) => {
-    const [icon, setIcon] = useState(isOnWatchedList ? "star" : "star-o");
-
-    const addOrRemove = () => {
-      if (isOnWatchedList) {
-        setIcon("star-o");
-        remove();
-      } else {
-        setIcon("star");
-        add();
-      }
-    };
-
-    return (
-      <TouchableOpacity
-        style={bottomSection.watchedButton}
-        onPress={addOrRemove}
-      >
-        <FontAwesome name={icon} size={28} color={colors.yellow} />
-        <Text style={bottomSection.watchedText}>Watched</Text>
-      </TouchableOpacity>
-    );
-  };
-
+  // Bottom section, the buttons
   const BottomSection = () => {
+    // Will Watch button, heart
+    const WillWatchButton = ({ add, remove }) => {
+      const [icon, setIcon] = useState(isOnWillWatchList ? "heart" : "heart-o");
+
+      const addOrRemove = () => {
+        if (isOnWillWatchList) {
+          setIcon("heart-o");
+          remove();
+        } else {
+          setIcon("heart");
+          add();
+        }
+      };
+
+      return (
+        <TouchableOpacity style={bottomSection.willWatch} onPress={addOrRemove}>
+          <FontAwesome name={icon} size={28} color={colors.red} />
+          <Text style={bottomSection.watchedText}>Save</Text>
+        </TouchableOpacity>
+      );
+    };
+
+    // Watched button, star
+    const WatchedButton = ({ add, remove }) => {
+      const [icon, setIcon] = useState(isOnWatchedList ? "star" : "star-o");
+
+      const addOrRemove = () => {
+        if (isOnWatchedList) {
+          setIcon("star-o");
+          remove();
+        } else {
+          setIcon("star");
+          add();
+        }
+      };
+
+      return (
+        <TouchableOpacity
+          style={bottomSection.watchedButton}
+          onPress={addOrRemove}
+        >
+          <FontAwesome name={icon} size={28} color={colors.yellow} />
+          <Text style={bottomSection.watchedText}>Watched</Text>
+        </TouchableOpacity>
+      );
+    };
+
     return (
       <View style={bottomSection.container}>
         <WillWatchButton

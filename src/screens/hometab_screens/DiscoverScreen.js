@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import CustomSafeAreaView from "../components/CustomSafeAreaView";
+import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 import { CollapsibleHeaderScrollView } from "react-native-collapsible-header-views";
-import Header from "../components/Header";
-import { fetchGenres } from "../api/tmdb";
+import Header from "../../components/Header";
+import { fetchGenres } from "../../api/tmdb";
 import { SimpleGrid } from "react-native-super-grid";
 import {
   FontAwesome5,

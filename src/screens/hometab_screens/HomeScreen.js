@@ -7,17 +7,17 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import "../config";
-import SimpleCard from "../components/SimpleCard";
-import tmdbApi from "../api/tmdb";
-import TitleText from "../components/TitleText";
-import MovieContext from "../context/MovieContext";
-import DetailedCard from "../components/DetailedCard";
+import "../../config";
+import SimpleCard from "../../components/SimpleCard";
+import tmdbApi from "../../api/tmdb";
+import TitleText from "../../components/TitleText";
+import MovieContext from "../../context/MovieContext";
+import DetailedCard from "../../components/DetailedCard";
 import { CollapsibleHeaderScrollView } from "react-native-collapsible-header-views";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import { useNavigation } from "@react-navigation/core";
 import { Entypo } from "@expo/vector-icons";
-import CustomSafeAreaView from "../components/CustomSafeAreaView";
+import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 
 const { colors, sizes } = global.config.style;
 

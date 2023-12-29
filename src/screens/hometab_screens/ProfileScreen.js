@@ -4,8 +4,8 @@ import {
   CollapsibleHeaderScrollView,
   CollapsibleHeaderSectionList,
 } from "react-native-collapsible-header-views";
-import Header from "../components/Header";
-import CustomSafeAreaView from "../components/CustomSafeAreaView";
+import Header from "../../components/Header";
+import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 
 const { colors, sizes } = global.config.style;
 

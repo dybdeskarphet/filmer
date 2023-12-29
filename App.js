@@ -16,10 +16,10 @@ import ProfileScreen from "./src/screens/ProfileScreen";
 import DiscoverScreen from "./src/screens/DiscoverScreen";
 import WatchedScreen from "./src/screens/WatchedScreen";
 import WillWatchScreen from "./src/screens/WillWatchScreen";
+import GenreDiscoverScreen from "./src/screens/GenreDiscoverScreen";
 
 const { colors } = global.config.style;
 const Stack = createNativeStackNavigator();
-
 const HomeTab = createBottomTabNavigator();
 
 const HomeTabs = () => {
@@ -81,6 +81,11 @@ const App = () => {
               options={{ title: "Watch Later" }}
               name="WillWatch"
               component={WillWatchScreen}
+            />
+            <Stack.Screen
+              options={{ title: "Discover" }}
+              name="GenreDiscover"
+              component={GenreDiscoverScreen}
             />
           </Stack.Navigator>
         </View>

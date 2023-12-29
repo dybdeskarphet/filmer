@@ -6,14 +6,14 @@ import {
   createNativeStackNavigator,
   TransitionPresets,
 } from "@react-navigation/native-stack";
-import HomeScreen from "./src/screens/HomeScreen";
+import HomeScreen from "./src/screens/hometab_screens/HomeScreen";
 import DetailsScreen from "./src/screens/DetailsScreen";
 import "./src/config";
 import { MovieProvider } from "./src/context/MovieContext";
 import SearchScreen from "./src/screens/SearchScreen";
 import HomeTabBar from "./src/components/tabbars/HomeTabBar";
-import ProfileScreen from "./src/screens/ProfileScreen";
-import DiscoverScreen from "./src/screens/DiscoverScreen";
+import ProfileScreen from "./src/screens/hometab_screens/ProfileScreen";
+import DiscoverScreen from "./src/screens/hometab_screens/DiscoverScreen";
 import WatchedScreen from "./src/screens/WatchedScreen";
 import WillWatchScreen from "./src/screens/WillWatchScreen";
 import GenreDiscoverScreen from "./src/screens/GenreDiscoverScreen";

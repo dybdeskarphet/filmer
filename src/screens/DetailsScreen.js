@@ -25,14 +25,11 @@ const DetailsScreen = ({ route }) => {
     removeFromWatchedList,
   } = useContext(MovieContext);
 
+  const { id } = route.params;
   const [movieDetails, setMovieDetails] = useState(null);
   const [recommendedMovies, setRecommendedMovies] = useState(null);
   const [images, setImages] = useState(null);
   const [imageViewVisible, setImageViewVisible] = useState(false);
-  const isInitialLoad = useRef(true);
-
-  const { id } = route.params;
-
   const { state } = useContext(MovieContext);
   const isOnWillWatchList = state.willWatchList.includes(id);
   const isOnWatchedList = state.watchedList.includes(id);

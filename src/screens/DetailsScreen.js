@@ -91,7 +91,7 @@ const DetailsScreen = ({ route }) => {
   const FilmOverview = () => {
     const icons = [
       <View style={filmOverview.icon.container} key="star">
-        <FontAwesome name="star" size={24} color={colors.yellow} />
+        <FontAwesome name="star-half-full" size={24} color={colors.yellow} />
         <Text style={filmOverview.icon.text}>{vote_average.toFixed(1)}/10</Text>
       </View>,
       <View style={filmOverview.icon.container} key="user">
@@ -124,10 +124,34 @@ const DetailsScreen = ({ route }) => {
   const BottomSection = () => {
     // Will Watch button, heart
     const WillWatchButton = ({ add, remove }) => {
-      const [icon, setIcon] = useState(isOnWillWatchList ? "heart" : "heart-o");
+      const [icon, setIcon] = useState(
+        isOnWillWatchList ? "bookmark" : "bookmark-o"
+      );
 
       const addOrRemove = () => {
         if (isOnWillWatchList) {
+          setIcon("bookmark-o");
+          remove();
+        } else {
+          setIcon("bookmark");
+          add();
+        }
+      };
+
+      return (
+        <TouchableOpacity style={bottomSection.willWatch} onPress={addOrRemove}>
+          <FontAwesome name={icon} size={28} color={colors.yellow} />
+          <Text style={bottomSection.watchedText}>Save</Text>
+        </TouchableOpacity>
+      );
+    };
+
+    // Watched button, star
+    const WatchedButton = ({ add, remove }) => {
+      const [icon, setIcon] = useState(isOnWatchedList ? "heart" : "heart-o");
+
+      const addOrRemove = () => {
+        if (isOnWatchedList) {
           setIcon("heart-o");
           remove();
         } else {
@@ -137,33 +161,11 @@ const DetailsScreen = ({ route }) => {
       };
 
       return (
-        <TouchableOpacity style={bottomSection.willWatch} onPress={addOrRemove}>
-          <FontAwesome name={icon} size={28} color={colors.red} />
-          <Text style={bottomSection.watchedText}>Save</Text>
-        </TouchableOpacity>
-      );
-    };
-
-    // Watched button, star
-    const WatchedButton = ({ add, remove }) => {
-      const [icon, setIcon] = useState(isOnWatchedList ? "star" : "star-o");
-
-      const addOrRemove = () => {
-        if (isOnWatchedList) {
-          setIcon("star-o");
-          remove();
-        } else {
-          setIcon("star");
-          add();
-        }
-      };
-
-      return (
         <TouchableOpacity
           style={bottomSection.watchedButton}
           onPress={addOrRemove}
         >
-          <FontAwesome name={icon} size={28} color={colors.yellow} />
+          <FontAwesome name={icon} size={28} color={colors.red} />
           <Text style={bottomSection.watchedText}>Watched</Text>
         </TouchableOpacity>
       );

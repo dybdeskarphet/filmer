@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet } from "react-native";
 import React from "react";
 import {
   CollapsibleHeaderScrollView,
@@ -20,7 +20,15 @@ const ProfileScreen = () => {
         headerContainerBackgroundColor={colors.dark1}
         style={styles.container}
       >
-        <Text>ProfileScreen</Text>
+        <Image
+          style={{
+            width: 155,
+            height: 150,
+            alignSelf: "center",
+            marginTop: 200,
+          }}
+          source={require("../../../assets/wip.png")}
+        />
 
         <View style={{ marginBottom: sizes.tabbarSpace }} />
       </CollapsibleHeaderScrollView>

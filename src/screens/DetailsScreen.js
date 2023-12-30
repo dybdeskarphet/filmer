@@ -8,18 +8,19 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import MovieContext from "../context/MovieContext";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import MovieContext, { MovieProvider } from "../context/MovieContext";
 import tmdbApi, {
   fetchImages,
   fetchRecommendedMovies,
+  fetchWatchProviders,
   getMovieDetails,
 } from "../api/tmdb"; // Import your API module
 import CustomSafeAreaView from "../components/CustomSafeAreaView";
 import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
 
-const { colors, sizes } = global.config.style;
+const { colors, sizes, hexTransparencies } = global.config.style;
 
 const DetailsScreen = ({ route }) => {
   const {
@@ -30,35 +31,83 @@ const DetailsScreen = ({ route }) => {
   } = useContext(MovieContext);
 
   const { id } = route.params;
+  const { state } = useContext(MovieContext);
+
   const [movieDetails, setMovieDetails] = useState(null);
   const [recommendedMovies, setRecommendedMovies] = useState(null);
   const [images, setImages] = useState(null);
+  const [watchProviders, setWatchProviders] = useState(null);
   const [imageViewVisible, setImageViewVisible] = useState(false);
-  const { state } = useContext(MovieContext);
+
   const isOnWillWatchList = state.willWatchList.includes(id);
   const isOnWatchedList = state.watchedList.includes(id);
+
+  const processWatchProviders = (providersData) => {
+    let providers = {
+      buyOrRent: [],
+      streamingOn: [],
+    };
+
+    // Example for getting global providers or a specific country (e.g., 'US')
+    const countryProviders = providersData["US"] || providersData["GB"] || [];
+
+    // Combine providers from different categories with priority: flatrate, buy, rent
+    const buyOrRent = [
+      ...(countryProviders.buy || []),
+      ...(countryProviders.rent || []),
+    ];
+
+    const streamingOn = [...(countryProviders.flatrate || [])];
+
+    // Filtering out duplicates
+    buyOrRent.forEach((provider) => {
+      if (
+        !providers.buyOrRent.find((p) => p.provider_id === provider.provider_id)
+      ) {
+        providers.buyOrRent.push(provider);
+      }
+    });
+
+    streamingOn.forEach((provider) => {
+      providers.streamingOn.push(provider);
+    });
+
+    return providers;
+  };
 
   // Fetch the movie details for the FilmOverview component
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [movieDetailsData, recommendedMoviesData, imagesData] =
-          await Promise.all([
-            getMovieDetails(id),
-            fetchRecommendedMovies(id),
-            fetchImages(id),
-          ]);
+        const [
+          movieDetailsData,
+          recommendedMoviesData,
+          imagesData,
+          watchProvidersData,
+        ] = await Promise.all([
+          getMovieDetails(id),
+          fetchRecommendedMovies(id),
+          fetchImages(id),
+          fetchWatchProviders(id),
+        ]);
 
         setMovieDetails(movieDetailsData);
         setRecommendedMovies(recommendedMoviesData);
         setImages(imagesData);
+
+        if (watchProvidersData) {
+          const processedProviders = await processWatchProviders(
+            watchProvidersData
+          );
+          setWatchProviders(processedProviders);
+        }
       } catch (error) {
         console.error("Error fetching data for the movie: ", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   if (!movieDetails) {
     // Display a loading indicator or handle loading state
@@ -78,6 +127,7 @@ const DetailsScreen = ({ route }) => {
     popularity,
     vote_count,
     vote_average,
+    genres,
   } = movieDetails;
 
   // Set image
@@ -106,11 +156,24 @@ const DetailsScreen = ({ route }) => {
           <Image style={filmOverview.image} source={{ uri: image }} />
         )}
         <Text style={filmOverview.title}>{title}</Text>
-        {release_date != "" && (
-          <Text style={filmOverview.releaseDate}>
-            {release_date.match(/^(\d{4})/g)}
-          </Text>
-        )}
+        <View style={filmOverview.yearAndGenres}>
+          {release_date != "" && (
+            <Text style={filmOverview.releaseDate}>
+              {release_date.match(/^(\d{4})/g)}
+            </Text>
+          )}
+          {genres.length > 0 && (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <FontAwesome
+                style={{ marginHorizontal: 8 }}
+                name="circle"
+                size={5}
+                color={colors.light3}
+              />
+              <Text style={filmOverview.genres}>{genres[0].name}</Text>
+            </View>
+          )}
+        </View>
         <Text style={filmOverview.desc}>{overview}</Text>
         <View style={filmOverview.iconsContainer}>{icons}</View>
         <View style={filmOverview.bottomSectionContainer}>
@@ -186,6 +249,86 @@ const DetailsScreen = ({ route }) => {
     );
   };
 
+  const Platforms = () => {
+    // Check if both buyOrRent and streamingOn lists are empty
+    const noProvidersAvailable =
+      watchProviders &&
+      watchProviders.buyOrRent.length === 0 &&
+      watchProviders.streamingOn.length === 0;
+
+    if (noProvidersAvailable) {
+      return (
+        <View style={platforms.notFoundContainer}>
+          <MaterialCommunityIcons
+            name="movie-open-off-outline"
+            size={24}
+            color={`${colors.light3}${hexTransparencies[80]}`}
+          />
+          <Text style={platforms.notFoundText}>
+            No watch provider available for now...
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <View>
+        <View style={platforms.titles}>
+          <TitleText text="Available on" style={platforms.title} />
+          <Text style={platforms.poweredByJustwatch}>Powered by JustWatch</Text>
+        </View>
+        <ScrollView
+          contentContainerStyle={platforms.contentContainer}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={platforms.container}
+        >
+          {watchProviders?.streamingOn.map((provider) => (
+            <View key={provider.provider_id} style={platforms.item}>
+              <Image
+                style={platforms.image}
+                source={{
+                  uri: `https://image.tmdb.org/t/p/original${provider.logo_path}`,
+                }}
+              />
+              <Text style={platforms.provider_name}>
+                {provider.provider_name}
+              </Text>
+            </View>
+          ))}
+
+          {watchProviders?.buyOrRent.map((provider, index) => (
+            <View style={{ flexDirection: "row" }} key={provider.provider_id}>
+              {watchProviders.streamingOn.length > 0 && index === 0 && (
+                <View
+                  style={{
+                    backgroundColor: colors.light3,
+                    width: 1,
+                    marginVertical: 10,
+                    marginRight: 10,
+                    marginLeft: 5,
+                    bottom: 5,
+                  }}
+                />
+              )}
+              <View style={platforms.item}>
+                <Image
+                  style={platforms.image}
+                  source={{
+                    uri: `https://image.tmdb.org/t/p/original${provider.logo_path}`,
+                  }}
+                />
+                <Text style={platforms.provider_name}>
+                  {provider.provider_name}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  };
+
   const MovieImages = () => {
     let imageViewList = [
       "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
@@ -226,14 +369,12 @@ const DetailsScreen = ({ route }) => {
     if (recommendedMovies != null && recommendedMovies.length > 0) {
       return (
         <View>
-          <View style={{ marginBottom: 15, marginHorizontal: 15 }}>
-            <TitleText text="Recommended" />
-          </View>
+          <TitleText style={recommended.title} text="Recommended" />
           <FlatList
             data={recommendedMovies}
             keyExtractor={(item) => item.id.toString()}
             horizontal
-            contentContainerStyle={{ paddingHorizontal: 15 }}
+            contentContainerStyle={recommended.flatlistContainer}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item, key }) => (
               <SimpleCard
@@ -251,7 +392,7 @@ const DetailsScreen = ({ route }) => {
     }
   };
 
-  const components = [<FilmOverview />];
+  const components = [<FilmOverview />, <Platforms />];
 
   const otherComponents = [<MovieImages />, <Recommended />];
 
@@ -340,8 +481,64 @@ const movieImages = StyleSheet.create({
     borderRadius: sizes.radius,
     marginRight: 20,
     borderWidth: 1,
-    borderColor: `${colors.light3}cc`,
+    borderColor: `${colors.light3}${hexTransparencies[80]}`,
   },
+});
+
+const platforms = StyleSheet.create({
+  title: {},
+  poweredByJustwatch: {
+    fontSize: 10,
+    color: colors.light3,
+    marginTop: -3,
+    marginBottom: 15,
+  },
+  titles: {},
+  container: {
+    backgroundColor: colors.dark0,
+    paddingVertical: 15,
+    borderRadius: sizes.radiusBig,
+  },
+  contentContainer: {
+    paddingHorizontal: 15,
+  },
+  provider_name: {
+    fontSize: 10,
+    color: colors.light1,
+    textAlign: "center",
+  },
+  image: {
+    width: 55,
+    height: 55,
+    borderRadius: sizes.radius,
+  },
+  item: {
+    marginRight: 5,
+    alignItems: "center",
+    width: 66,
+  },
+  notFoundContainer: {
+    paddingHorizontal: 30,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: `${colors.dark0}${hexTransparencies[80]}`,
+    paddingHorizontal: 100,
+    paddingVertical: 20,
+    borderRadius: sizes.radius,
+  },
+  notFoundText: {
+    color: `${colors.light1}${hexTransparencies[80]}`,
+    marginLeft: 15,
+  },
+});
+
+const recommended = StyleSheet.create({
+  title: {
+    marginBottom: 15,
+    marginHorizontal: 15,
+  },
+  flatlistContainer: { paddingHorizontal: 15 },
 });
 
 const filmOverview = StyleSheet.create({
@@ -349,6 +546,14 @@ const filmOverview = StyleSheet.create({
     padding: 15,
     backgroundColor: colors.dark0,
     borderRadius: sizes.radiusBig,
+  },
+  yearAndGenres: {
+    flexDirection: "row",
+  },
+  genres: {
+    fontSize: 16,
+    color: colors.light3,
+    fontWeight: "500",
   },
   bottomSectionContainer: {
     marginTop: 15,

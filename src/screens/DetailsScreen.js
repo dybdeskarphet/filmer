@@ -10,7 +10,11 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import MovieContext from "../context/MovieContext";
-import tmdbApi, { fetchRecommendedMovies, getMovieDetails } from "../api/tmdb"; // Import your API module
+import tmdbApi, {
+  fetchImages,
+  fetchRecommendedMovies,
+  getMovieDetails,
+} from "../api/tmdb"; // Import your API module
 import CustomSafeAreaView from "../components/CustomSafeAreaView";
 import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
@@ -36,46 +40,24 @@ const DetailsScreen = ({ route }) => {
 
   // Fetch the movie details for the FilmOverview component
   useEffect(() => {
-    const details = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getMovieDetails(id);
-        setMovieDetails(data);
+        const [movieDetailsData, recommendedMoviesData, imagesData] =
+          await Promise.all([
+            getMovieDetails(id),
+            fetchRecommendedMovies(id),
+            fetchImages(id),
+          ]);
+
+        setMovieDetails(movieDetailsData);
+        setRecommendedMovies(recommendedMoviesData);
+        setImages(imagesData);
       } catch (error) {
-        console.error("Error fetching movie details:", error);
+        console.error("Error fetching data for the movie: ", error);
       }
     };
 
-    details();
-  }, []);
-
-  // Fetch the recommended movies according to the selected movie
-  useEffect(() => {
-    const recommended = async () => {
-      try {
-        const data = await fetchRecommendedMovies(id);
-        setRecommendedMovies(data);
-      } catch (error) {
-        console.error("Error fetching recommended movies: ", error);
-      }
-    };
-
-    recommended()
-  }, []);
-
-  // Fetch images of the movie
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await tmdbApi.get(`movie/${id}/images`);
-        if (response.data.backdrops != null) {
-          setImages(response.data.backdrops);
-        }
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      }
-    };
-
-    fetchImages();
+    fetchData();
   }, []);
 
   if (!movieDetails) {

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import "../../config";
 import SimpleCard from "../../components/SimpleCard";
-import tmdbApi from "../../api/tmdb";
+import tmdbApi, { fetchPopularMovies, getMovieDetails } from "../../api/tmdb";
 import TitleText from "../../components/TitleText";
 import MovieContext from "../../context/MovieContext";
 import DetailedCard from "../../components/DetailedCard";
@@ -23,23 +23,18 @@ const { colors, sizes } = global.config.style;
 
 const PopularMovies = () => {
   const [movies, setMovies] = useState([]);
-  const { addToWillWatchList, addToWatchedList } = useContext(MovieContext);
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    const popular = async () => {
       try {
-        const response = await tmdbApi.get("discover/movie", {
-          params: {
-            sort_by: "popularity.desc",
-          },
-        });
-        setMovies(response.data.results);
+        const data = await fetchPopularMovies();
+        setMovies(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error while retrieving popular movies data: ", error);
       }
     };
 
-    fetchMovies();
+    popular()
   }, []);
 
   return (
@@ -53,12 +48,7 @@ const PopularMovies = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={popularMovies.flatlistContainer}
-        renderItem={({ item, key }) => (
-          <SimpleCard
-            key={key}
-            id={item.id}
-          />
-        )}
+        renderItem={({ item, key }) => <SimpleCard key={key} id={item.id} />}
       />
     </View>
   );
@@ -101,8 +91,8 @@ const WillWatch = ({ willWatchList }) => {
       const moviesData = await Promise.all(
         willWatchList.map(async (movieId) => {
           try {
-            const response = await tmdbApi.get(`movie/${movieId}`);
-            return response.data;
+            const data = await getMovieDetails(movieId);
+            return data;
           } catch (error) {
             console.error("Error fetching movie details:", error);
             return null;
@@ -158,8 +148,8 @@ const Watched = ({ watchedList }) => {
       const moviesData = await Promise.all(
         watchedList.map(async (movieId) => {
           try {
-            const response = await tmdbApi.get(`movie/${movieId}`);
-            return response.data;
+            const data = await getMovieDetails(movieId);
+            return data;
           } catch (error) {
             console.error("Error fetching movie details:", error);
             return null;

@@ -11,7 +11,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 
-const { colors, sizes } = global.config.style;
+const { colors, sizes, hexTransparencies } = global.config.style;
 
 const DiscoverScreen = ({ navigation }) => {
   const [genres, setGenres] = useState();
@@ -228,7 +228,7 @@ const screen = StyleSheet.create({
 
 const showMoreGenres = StyleSheet.create({
   container: {
-    backgroundColor: `${colors.dark0}cc`,
+    backgroundColor: `${colors.dark0}${hexTransparencies[80]}`,
     marginHorizontal: 15,
     paddingVertical: 10,
     alignItems: "center",
@@ -236,7 +236,7 @@ const showMoreGenres = StyleSheet.create({
     borderRadius: sizes.radiusBig,
   },
   text: {
-    color: `${colors.light1}cc`,
+    color: `${colors.light1}${hexTransparencies[80]}`,
   },
 });
 

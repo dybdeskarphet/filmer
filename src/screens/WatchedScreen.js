@@ -4,7 +4,7 @@ import MovieContext from "../context/MovieContext";
 import { getMovieDetails } from "../api/tmdb";
 import DetailedCard from "../components/DetailedCard";
 
-const { colors, sizes } = global.config.style;
+const { colors, sizes, hexTransparencies } = global.config.style;
 
 const WatchedScreen = () => {
   const [query, setQuery] = useState("");
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "",
     width: "100%",
-    backgroundColor: `${colors.dark2}f5`,
+    backgroundColor: `${colors.dark2}${hexTransparencies[96]}`,
     color: colors.light1,
     paddingLeft: 10,
     paddingRight: 15,

@@ -14,7 +14,7 @@ import { Feather } from "@expo/vector-icons";
 import "../config";
 import CustomSafeAreaView from "../components/CustomSafeAreaView";
 
-const { colors, sizes } = global.config.style;
+const { colors, sizes, hexTransparencies } = global.config.style;
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,9 +60,7 @@ const SearchScreen = () => {
             renderItem={({ item, index }) => {
               return (
                 <React.Fragment>
-                  <DetailedCard
-                    id={item.id}
-                  />
+                  <DetailedCard id={item.id} />
 
                   {index !== searchResults.length - 1 && (
                     <View style={{ margin: 6 }} />
@@ -105,12 +103,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "",
     width: "100%",
-    backgroundColor: `${colors.dark2}f5`,
+    backgroundColor: `${colors.dark0}${hexTransparencies[95]}`,
     color: colors.light1,
     paddingLeft: 10,
     paddingRight: 15,
     borderRadius: sizes.radius,
-    borderColor: colors.light3,
+    borderColor: colors.dark2,
     borderWidth: 1,
   },
   searchInput: {

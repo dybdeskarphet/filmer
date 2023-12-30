@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/core";
 import { Entypo } from "@expo/vector-icons";
 import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 
-const { colors, sizes } = global.config.style;
+const { colors, sizes, hexTransparencies } = global.config.style;
 
 const PopularMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -34,7 +34,7 @@ const PopularMovies = () => {
       }
     };
 
-    popular()
+    popular();
   }, []);
 
   return (
@@ -77,7 +77,11 @@ const AddMovies = ({ message, navigateTo }) => {
       style={addMovies.container}
       onPress={() => navigation.navigate(navigateTo)}
     >
-      <Entypo name="plus" size={36} color={`${colors.light3}cc`} />
+      <Entypo
+        name="plus"
+        size={36}
+        color={`${colors.light3}${hexTransparencies[80]}`}
+      />
       <Text style={addMovies.message}>{message}</Text>
     </TouchableOpacity>
   );
@@ -267,7 +271,7 @@ const listStyles = StyleSheet.create({
 
 const showMore = StyleSheet.create({
   container: {
-    backgroundColor: `${colors.dark0}e6`,
+    backgroundColor: `${colors.dark0}${hexTransparencies[80]}`,
     height: 40,
     alignItems: "center",
     justifyContent: "center",
@@ -284,15 +288,15 @@ const addMovies = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     height: 100,
-    backgroundColor: `${colors.dark0}cc`,
+    backgroundColor: `${colors.dark0}${hexTransparencies[80]}`,
     borderRadius: sizes.radiusBig,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: `${colors.dark2}cc`,
+    borderColor: `${colors.dark2}${hexTransparencies[80]}`,
   },
   message: {
-    color: `${colors.light3}cc`,
+    color: `${colors.light3}${hexTransparencies[80]}`,
     fontSize: 13,
     paddingLeft: 20,
   },

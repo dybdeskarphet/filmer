@@ -1,12 +1,13 @@
-import { View, StyleSheet } from "react-native";
+import { View,Text, StyleSheet } from "react-native";
 import React from "react";
-i
+
 const { colors } = global.config.style;
 
 const GenreDiscoverScreen = ({ route }) => {
   const { id } = route.params;
   return (
     <View style={styles.container}>
+      <Text>GenreDiscoverScreen</Text>
     </View>
   );
 };

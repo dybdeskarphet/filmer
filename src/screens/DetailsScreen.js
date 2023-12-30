@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import MovieContext from "../context/MovieContext";
-import tmdbApi from "../api/tmdb"; // Import your API module
+import tmdbApi, { fetchRecommendedMovies, getMovieDetails } from "../api/tmdb"; // Import your API module
 import CustomSafeAreaView from "../components/CustomSafeAreaView";
 import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
@@ -36,32 +36,30 @@ const DetailsScreen = ({ route }) => {
 
   // Fetch the movie details for the FilmOverview component
   useEffect(() => {
-    const fetchMovieDetails = async () => {
+    const details = async () => {
       try {
-        const response = await tmdbApi.get(`movie/${id}`);
-        setMovieDetails(response.data);
+        const data = await getMovieDetails(id);
+        setMovieDetails(data);
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
     };
 
-    fetchMovieDetails();
+    details();
   }, []);
 
   // Fetch the recommended movies according to the selected movie
   useEffect(() => {
-    const fetchRecommendedMovies = async () => {
+    const recommended = async () => {
       try {
-        const response = await tmdbApi.get(`movie/${id}/recommendations`);
-        if (response.data.results != null) {
-          setRecommendedMovies(response.data.results);
-        }
+        const data = await fetchRecommendedMovies(id);
+        setRecommendedMovies(data);
       } catch (error) {
-        console.error("Error fetching recommended movies:", error);
+        console.error("Error fetching recommended movies: ", error);
       }
     };
 
-    fetchRecommendedMovies();
+    recommended()
   }, []);
 
   // Fetch images of the movie

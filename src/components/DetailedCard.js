@@ -81,7 +81,11 @@ const DetailedCard = ({ id }) => {
               <Text style={styles.ratingText}>
                 {filmDetails ? filmDetails.vote_average.toFixed(1) : "0.0"}/10
               </Text>
-              <FontAwesome name="star" size={22} color={colors.yellow} />
+              <FontAwesome
+                name="star-half-full"
+                size={22}
+                color={colors.yellow}
+              />
             </View>
           </View>
           <Text numberOfLines={4} style={styles.desc}>

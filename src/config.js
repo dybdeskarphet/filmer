@@ -7,9 +7,10 @@ module.exports = global.config = {
       light1: "#f6fbfd",
       light2: "#d3d6de",
       light3: "#a8aebd",
-      yellow: "#FFEE58",
-      cyan: "#4DB6AC",
       red: "#EF5350",
+      green: "#9CCC65",
+      cyan: "#4DB6AC",
+      yellow: "#FFEE58",
     },
     sizes: {
       radiusBig: 25,

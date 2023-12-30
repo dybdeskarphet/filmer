@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import "../../config";
 import { Shadow } from "react-native-shadow-2";
 
-const { colors, sizes } = global.config.style;
+const { colors, sizes, hexTransparencies } = global.config.style;
 
 const HomeTabBar = ({ state, descriptors, navigation }) => {
   return (
@@ -52,7 +52,15 @@ const HomeTabBar = ({ state, descriptors, navigation }) => {
                 onPress={onPress}
                 style={styles.icon}
               >
-                <Ionicons name={icon} size={24} color={colors.light1} />
+                {isFocused ? (
+                  <Ionicons name={icon} size={24} color={colors.light1} />
+                ) : (
+                  <Ionicons
+                    name={icon}
+                    size={24}
+                    color={`${colors.light3}${hexTransparencies[80]}`}
+                  />
+                )}
               </TouchableOpacity>
             );
           })}
@@ -74,10 +82,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: `${colors.dark0}f2`,
+    backgroundColor: `${colors.dark0}${hexTransparencies[95]}`,
     borderRadius: sizes.radius,
     borderWidth: 1,
     borderColor: colors.dark2,
+    alignItems: "center",
   },
   icon: {
     padding: 17,

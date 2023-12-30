@@ -83,7 +83,7 @@ const App = () => {
               component={WillWatchScreen}
             />
             <Stack.Screen
-              options={{ title: "Discover" }}
+              options={({route}) => ({title: route.params.name})}
               name="GenreDiscover"
               component={GenreDiscoverScreen}
             />

@@ -15,6 +15,8 @@ const { colors, sizes } = global.config.style;
 
 const DiscoverScreen = ({ navigation }) => {
   const [genres, setGenres] = useState();
+  const [showAllGenres, setShowAllGenres] = useState(false);
+  const initialDisplayGenres = 8;
 
   useEffect(() => {
     const loadGenres = async () => {
@@ -157,11 +159,24 @@ const DiscoverScreen = ({ navigation }) => {
         style={genreSection.buttonContainer}
         onPress={() => {
           console.log("Genre is pressed: " + name);
-          navigation.navigate("GenreDiscover", { id });
+          navigation.navigate("GenreDiscover", { id, name });
         }}
       >
         <IconComponent name={name} />
         <Text style={genreSection.buttonText}>{name}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const ShowMoreGenres = () => {
+    return (
+      <TouchableOpacity
+        style={showMoreGenres.container}
+        onPress={() => setShowAllGenres(!showAllGenres)}
+      >
+        <Text style={showMoreGenres.text}>
+          {showAllGenres ? "Show Less" : "Show More"}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -171,15 +186,19 @@ const DiscoverScreen = ({ navigation }) => {
       return <Text>Loading genres...</Text>; // Or any other placeholder
     }
 
+    const displayedGenres = showAllGenres
+      ? genres
+      : genres.slice(0, initialDisplayGenres);
+
     return (
       <View>
         <SimpleGrid
-          itemDimension={130}
-          data={genres}
+          data={displayedGenres}
           renderItem={({ item, key }) => (
             <GenresButton key={key} id={item.id} name={item.name} />
           )}
         />
+        {genres.length > initialDisplayGenres && <ShowMoreGenres />}
       </View>
     );
   };
@@ -204,6 +223,20 @@ const screen = StyleSheet.create({
   container: {
     marginHorizontal: 15,
     marginTop: 16,
+  },
+});
+
+const showMoreGenres = StyleSheet.create({
+  container: {
+    backgroundColor: `${colors.dark0}cc`,
+    marginHorizontal: 15,
+    paddingVertical: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: sizes.radiusBig,
+  },
+  text: {
+    color: `${colors.light1}cc`,
   },
 });
 

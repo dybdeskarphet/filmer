@@ -332,31 +332,32 @@ const DetailsScreen = ({ route }) => {
   const MovieImages = () => {
     return (
       <View>
-        <View style={{ marginBottom: 15, marginHorizontal: 15 }}>
-          <TitleText text="Images" />
+        <TitleText style={movieImages.title} text="Images" />
+        <View style={movieImages.flatlistWrapper}>
+          <FlatList
+            data={images}
+            keyExtractor={(item) => item.file_path.toString()}
+            horizontal
+            contentContainerStyle={movieImages.flatlistContainer}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, key }) => {
+              return (
+                <TouchableOpacity
+                  key={key}
+                  onPress={() => setImageViewVisible(true)}
+                  style={movieImages.imageContainer}
+                >
+                  <Image
+                    style={movieImages.image}
+                    source={{
+                      uri: `https://image.tmdb.org/t/p/w500${item.file_path}`,
+                    }}
+                  />
+                </TouchableOpacity>
+              );
+            }}
+          />
         </View>
-        <FlatList
-          data={images}
-          keyExtractor={(item) => item.file_path.toString()}
-          horizontal
-          contentContainerStyle={{ paddingHorizontal: 15 }}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item, key }) => {
-            return (
-              <TouchableOpacity
-                key={key}
-                onPress={() => setImageViewVisible(true)}
-              >
-                <Image
-                  style={movieImages.image}
-                  source={{
-                    uri: `https://image.tmdb.org/t/p/w500${item.file_path}`,
-                  }}
-                />
-              </TouchableOpacity>
-            );
-          }}
-        />
       </View>
     );
   };
@@ -478,6 +479,26 @@ const movieImages = StyleSheet.create({
     marginRight: 20,
     borderWidth: 1,
     borderColor: `${colors.light3}${hexTransparencies[80]}`,
+  },
+  imageContainer: {
+    borderRadius: sizes.radius,
+    overflow: "hidden",
+  },
+  title: {
+    marginBottom: 15,
+    marginHorizontal: 15,
+  },
+  flatlistWrapper: {
+    borderRadius: sizes.radius,
+    overflow: "hidden",
+    marginHorizontal: 15,
+    paddingVertical: 15,
+    backgroundColor: colors.dark0,
+  },
+  flatlistContainer: {
+    overflow: "hidden",
+    marginLeft: 15,
+    paddingRight: 14,
   },
 });
 

@@ -10,7 +10,7 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import TextTicker from "react-native-text-ticker";
 import { useNavigation } from "@react-navigation/native";
-import { getMovieDetails } from "../api/tmdb"; // Import the function from tmdb.js
+import { getMovieDetails } from "../api/tmdb"; 
 import { Shadow } from "react-native-shadow-2";
 
 const { colors, sizes } = global.config.style;
@@ -98,8 +98,6 @@ const DetailedCard = ({ id }) => {
 };
 
 export default DetailedCard;
-
-// ... styles remain the same
 
 const styles = StyleSheet.create({
   container: {

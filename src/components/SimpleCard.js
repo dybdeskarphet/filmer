@@ -10,7 +10,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import TextTicker from "react-native-text-ticker";
-import { getMovieDetails } from "../api/tmdb"; // Import the function from tmdb.js
+import { getMovieDetails } from "../api/tmdb"; 
 
 const { colors, sizes } = global.config.style;
 

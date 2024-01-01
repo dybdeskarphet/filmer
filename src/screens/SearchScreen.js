@@ -52,7 +52,7 @@ const SearchScreen = () => {
         {searchQuery == "" && searchResults.length == 0 ? (
           <EmptySearchPlaceholder />
         ) : (
-          // If you move this FlatList to another component, keyboard closes on every keystroke.
+          // ! If you move this FlatList to another component, keyboard closes on every keystroke.
           <FlatList
             data={searchResults}
             contentContainerStyle={{ paddingTop: 70 }}

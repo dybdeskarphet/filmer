@@ -367,23 +367,25 @@ const DetailsScreen = ({ route }) => {
       return (
         <View>
           <TitleText style={recommended.title} text="Recommended" />
-          <FlatList
-            data={recommendedMovies}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            contentContainerStyle={recommended.flatlistContainer}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item, key }) => (
-              <SimpleCard
-                key={key}
-                id={item.id}
-                title={item.title}
-                image={`https://image.tmdb.org/t/p/w500/${
-                  item.poster_path || item.backdrop_path
-                }`}
-              />
-            )}
-          />
+          <View style={recommended.flatlistContainer}>
+            <FlatList
+              data={recommendedMovies}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              contentContainerStyle={recommended.flatlist}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item, key }) => (
+                <SimpleCard
+                  key={key}
+                  id={item.id}
+                  title={item.title}
+                  image={`https://image.tmdb.org/t/p/w500/${
+                    item.poster_path || item.backdrop_path
+                  }`}
+                />
+              )}
+            />
+          </View>
         </View>
       );
     }
@@ -555,7 +557,12 @@ const recommended = StyleSheet.create({
     marginBottom: 15,
     marginHorizontal: 15,
   },
-  flatlistContainer: { paddingHorizontal: 15 },
+  flatlistContainer: {
+    overflow: "hidden",
+    borderTopLeftRadius: sizes.radius,
+    borderBottomLeftRadius: sizes.radius,
+    marginLeft: 15,
+  },
 });
 
 const filmOverview = StyleSheet.create({

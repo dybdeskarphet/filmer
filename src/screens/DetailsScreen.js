@@ -330,10 +330,6 @@ const DetailsScreen = ({ route }) => {
   };
 
   const MovieImages = () => {
-    let imageViewList = [
-      "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
-    ];
-
     return (
       <View>
         <View style={{ marginBottom: 15, marginHorizontal: 15 }}>

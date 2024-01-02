@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const { hexTransparencies, sizes, colors } = global.config.style;
 
-export type Props = {
+interface Props {
   icon: ReactElement;
   nav: string;
   title: string;

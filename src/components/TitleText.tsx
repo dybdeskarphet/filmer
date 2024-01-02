@@ -1,9 +1,14 @@
 import React from "react";
-import { Text } from "react-native";
+import { StyleProp, TextStyle, Text } from "react-native";
 
 const { colors } = global.config.style;
 
-const TitleText = ({ text, style }) => {
+interface TitleTextProps {
+  text: string;
+  style?: StyleProp<TextStyle>;
+}
+
+const TitleText = ({ text, style = {} }: TitleTextProps) => {
   return (
     <>
       <Text

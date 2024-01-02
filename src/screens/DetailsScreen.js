@@ -19,6 +19,7 @@ import tmdbApi, {
 import CustomSafeAreaView from "../components/CustomSafeAreaView";
 import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
+import ScreenLoading from "../components/ScreenLoading";
 
 const { colors, sizes, hexTransparencies } = global.config.style;
 
@@ -113,7 +114,7 @@ const DetailsScreen = ({ route }) => {
     // Display a loading indicator or handle loading state
     return (
       <View style={loading.container}>
-        <Text> Loading...</Text>
+        <ScreenLoading message="Movie details are loading..."/>
       </View>
     );
   }

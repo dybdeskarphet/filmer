@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import "../../config";
 import SimpleCard from "../../components/SimpleCard";
@@ -18,17 +19,26 @@ import Header from "../../components/Header";
 import { useNavigation } from "@react-navigation/core";
 import { Entypo } from "@expo/vector-icons";
 import CustomSafeAreaView from "../../components/CustomSafeAreaView";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const { colors, sizes, hexTransparencies } = global.config.style;
 
+interface Movie {
+  id: number;
+  title?: string;
+  overview?: string;
+  vote_average?: number;
+  poster_path?: string;
+}
+
 const PopularMovies = () => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
     const popular = async () => {
       try {
         const data = await fetchPopularMovies();
-        setMovies(data);
+        setMovies(data as Movie[]);
       } catch (error) {
         console.error("Error while retrieving popular movies data: ", error);
       }
@@ -48,14 +58,21 @@ const PopularMovies = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={popularMovies.flatlistContainer}
-        renderItem={({ item, key }) => <SimpleCard key={key} id={item.id} />}
+        renderItem={({ item, index }) => (
+          <SimpleCard key={index} id={item.id} />
+        )}
       />
     </View>
   );
 };
 
-const ShowMore = ({ list, navigateTo }) => {
-  const navigation = useNavigation();
+interface ShowMoreProps {
+  list: Movie[];
+  navigateTo: string;
+}
+
+const ShowMore = ({ list, navigateTo }: ShowMoreProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   if (list.length > 3) {
     return (
@@ -69,8 +86,13 @@ const ShowMore = ({ list, navigateTo }) => {
   }
 };
 
-const AddMovies = ({ message, navigateTo }) => {
-  const navigation = useNavigation();
+interface AddMoviesProps {
+  message: string;
+  navigateTo: string;
+}
+
+const AddMovies = ({ message, navigateTo }: AddMoviesProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
     <TouchableOpacity
@@ -87,7 +109,11 @@ const AddMovies = ({ message, navigateTo }) => {
   );
 };
 
-const WillWatch = ({ willWatchList }) => {
+interface WillWatchProps {
+  willWatchList: number[];
+}
+
+const WillWatch = ({ willWatchList }: WillWatchProps) => {
   const [willWatchMovies, setWillWatchMovies] = useState([]);
 
   useEffect(() => {
@@ -122,10 +148,6 @@ const WillWatch = ({ willWatchList }) => {
             <React.Fragment key={index}>
               <DetailedCard
                 id={item.id}
-                desc={item.overview}
-                title={item.title}
-                voteAverage={item.vote_average}
-                image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
               />
 
               {index !== willWatchMovies.length - 1 && (
@@ -144,7 +166,11 @@ const WillWatch = ({ willWatchList }) => {
   );
 };
 
-const Watched = ({ watchedList }) => {
+interface WatchedProps {
+  watchedList: number[];
+}
+
+const Watched = ({ watchedList }: WatchedProps) => {
   const [watchedMovies, setWatchedMovies] = useState([]);
 
   useEffect(() => {
@@ -178,10 +204,6 @@ const Watched = ({ watchedList }) => {
             <React.Fragment key={index}>
               <DetailedCard
                 id={item.id}
-                desc={item.overview}
-                title={item.title}
-                voteAverage={item.vote_average}
-                image={`https://image.tmdb.org/t/p/w154/${item.poster_path}`}
               />
 
               {index !== watchedMovies.length - 1 && (

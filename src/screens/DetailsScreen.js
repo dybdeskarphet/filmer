@@ -43,14 +43,15 @@ const DetailsScreen = ({ route }) => {
   const isOnWillWatchList = state.willWatchList.includes(id);
   const isOnWatchedList = state.watchedList.includes(id);
 
-  const processWatchProviders = (providersData) => {
+  const processWatchProviders = (providersData = "US", countryCode) => {
     let providers = {
       buyOrRent: [],
       streamingOn: [],
     };
 
     // Example for getting global providers or a specific country (e.g., 'US')
-    const countryProviders = providersData["US"] || providersData["GB"] || [];
+    const countryProviders =
+      providersData[countryCode] || providersData["GB"] || [];
 
     // Combine providers from different categories with priority: flatrate, buy, rent
     const buyOrRent = [
@@ -98,7 +99,8 @@ const DetailsScreen = ({ route }) => {
 
         if (watchProvidersData) {
           const processedProviders = await processWatchProviders(
-            watchProvidersData
+            watchProvidersData,
+            "TR"
           );
           setWatchProviders(processedProviders);
         }
@@ -114,7 +116,7 @@ const DetailsScreen = ({ route }) => {
     // Display a loading indicator or handle loading state
     return (
       <View style={loading.container}>
-        <ScreenLoading message="Movie details are loading..."/>
+        <ScreenLoading message="Movie details are loading..." />
       </View>
     );
   }

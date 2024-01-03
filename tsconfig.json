@@ -1,5 +1,10 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@env": ["node_modules/react-native-dotenv"]
+    }
+  },
   "extends": "expo/tsconfig.base",
   "allowJs": true
 }

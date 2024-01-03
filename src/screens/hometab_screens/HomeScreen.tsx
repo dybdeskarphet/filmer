@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import "../../config";
 import SimpleCard from "../../components/SimpleCard";
-import tmdbApi, { fetchPopularMovies, getMovieDetails } from "../../api/tmdb";
+import { fetchPopularMovies, getMovieDetails, Movie } from "../../api/tmdb";
 import TitleText from "../../components/TitleText";
 import MovieContext from "../../context/MovieContext";
 import DetailedCard from "../../components/DetailedCard";
@@ -22,14 +22,6 @@ import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const { colors, sizes, hexTransparencies } = global.config.style;
-
-interface Movie {
-  id: number;
-  title?: string;
-  overview?: string;
-  vote_average?: number;
-  poster_path?: string;
-}
 
 const PopularMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -146,9 +138,7 @@ const WillWatch = ({ willWatchList }: WillWatchProps) => {
           .slice(0, 3)
           .map((item, index) => (
             <React.Fragment key={index}>
-              <DetailedCard
-                id={item.id}
-              />
+              <DetailedCard id={item.id} />
 
               {index !== willWatchMovies.length - 1 && (
                 <View style={{ margin: 6 }} />
@@ -202,9 +192,7 @@ const Watched = ({ watchedList }: WatchedProps) => {
           .slice(0, 3)
           .map((item, index) => (
             <React.Fragment key={index}>
-              <DetailedCard
-                id={item.id}
-              />
+              <DetailedCard id={item.id} />
 
               {index !== watchedMovies.length - 1 && (
                 <View style={{ margin: 6 }} />

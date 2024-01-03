@@ -9,12 +9,16 @@ import {
   FlatList,
 } from "react-native";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import MovieContext, { MovieProvider } from "../context/MovieContext";
+import MovieContext from "../context/MovieContext";
 import tmdbApi, {
   fetchImages,
   fetchRecommendedMovies,
   fetchWatchProviders,
   getMovieDetails,
+  ImageData,
+  Provider,
+  MovieDetails,
+  Movie,
 } from "../api/tmdb"; // Import your API module
 import CustomSafeAreaView from "../components/CustomSafeAreaView";
 import TitleText from "../components/TitleText";
@@ -31,19 +35,26 @@ const DetailsScreen = ({ route }) => {
     removeFromWatchedList,
   } = useContext(MovieContext);
 
+  interface ProcessedProviders {
+    buyOrRent: Provider[];
+    streamingOn: Provider[];
+  }
+
   const { id } = route.params;
   const { state } = useContext(MovieContext);
 
-  const [movieDetails, setMovieDetails] = useState(null);
-  const [recommendedMovies, setRecommendedMovies] = useState(null);
-  const [images, setImages] = useState(null);
-  const [watchProviders, setWatchProviders] = useState(null);
-  const [imageViewVisible, setImageViewVisible] = useState(false);
+  const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
+  const [recommendedMovies, setRecommendedMovies] = useState<Movie[] | null>(
+    null
+  );
+  const [images, setImages] = useState<ImageData[] | null>(null);
+  const [watchProviders, setWatchProviders] =
+    useState<ProcessedProviders | null>(null);
 
   const isOnWillWatchList = state.willWatchList.includes(id);
   const isOnWatchedList = state.watchedList.includes(id);
 
-  const processWatchProviders = (providersData = "US", countryCode) => {
+  const processWatchProviders = (providersData, countryCode = "US") => {
     let providers = {
       buyOrRent: [],
       streamingOn: [],
@@ -98,10 +109,8 @@ const DetailsScreen = ({ route }) => {
         setImages(imagesData);
 
         if (watchProvidersData) {
-          const processedProviders = await processWatchProviders(
-            watchProvidersData,
-            "TR"
-          );
+          const processedProviders: ProcessedProviders =
+            await processWatchProviders(watchProvidersData, "TR");
           setWatchProviders(processedProviders);
         }
       } catch (error) {
@@ -143,13 +152,13 @@ const DetailsScreen = ({ route }) => {
   // Film overview, the first component
   const FilmOverview = () => {
     const icons = [
-      <View style={filmOverview.icon.container} key="star">
+      <View style={filmOverview.iconContainer} key="star">
         <FontAwesome name="star-half-full" size={24} color={colors.yellow} />
-        <Text style={filmOverview.icon.text}>{vote_average.toFixed(1)}/10</Text>
+        <Text style={filmOverview.iconText}>{vote_average.toFixed(1)}/10</Text>
       </View>,
-      <View style={filmOverview.icon.container} key="user">
+      <View style={filmOverview.iconContainer} key="user">
         <FontAwesome name="user" size={24} color={colors.cyan} />
-        <Text style={filmOverview.icon.text}>{vote_count} votes</Text>
+        <Text style={filmOverview.iconText}>{vote_count} votes</Text>
       </View>,
     ];
 
@@ -190,7 +199,9 @@ const DetailsScreen = ({ route }) => {
   const BottomSection = () => {
     // Will Watch button, heart
     const WillWatchButton = ({ add, remove }) => {
-      const [icon, setIcon] = useState(
+      type IconName = "bookmark" | "bookmark-o";
+
+      const [icon, setIcon] = useState<IconName>(
         isOnWillWatchList ? "bookmark" : "bookmark-o"
       );
 
@@ -214,7 +225,10 @@ const DetailsScreen = ({ route }) => {
 
     // Watched button, star
     const WatchedButton = ({ add, remove }) => {
-      const [icon, setIcon] = useState(isOnWatchedList ? "heart" : "heart-o");
+      type IconName = "heart" | "heart-o";
+      const [icon, setIcon] = useState<IconName>(
+        isOnWatchedList ? "heart" : "heart-o"
+      );
 
       const addOrRemove = () => {
         if (isOnWatchedList) {
@@ -343,11 +357,10 @@ const DetailsScreen = ({ route }) => {
             horizontal
             contentContainerStyle={movieImages.flatlistContainer}
             showsHorizontalScrollIndicator={false}
-            renderItem={({ item, key }) => {
+            renderItem={({ item, index }) => {
               return (
                 <TouchableOpacity
-                  key={key}
-                  onPress={() => setImageViewVisible(true)}
+                  key={index}
                   style={movieImages.imageContainer}
                 >
                   <Image
@@ -375,17 +388,9 @@ const DetailsScreen = ({ route }) => {
               data={recommendedMovies}
               keyExtractor={(item) => item.id.toString()}
               horizontal
-              contentContainerStyle={recommended.flatlist}
               showsHorizontalScrollIndicator={false}
-              renderItem={({ item, key }) => (
-                <SimpleCard
-                  key={key}
-                  id={item.id}
-                  title={item.title}
-                  image={`https://image.tmdb.org/t/p/w500/${
-                    item.poster_path || item.backdrop_path
-                  }`}
-                />
+              renderItem={({ item, index }) => (
+                <SimpleCard key={index} id={item.id} />
               )}
             />
           </View>
@@ -540,14 +545,13 @@ const platforms = StyleSheet.create({
     width: 66,
   },
   notFoundContainer: {
-    paddingHorizontal: 30,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: `${colors.dark0}${hexTransparencies[80]}`,
-    paddingHorizontal: 100,
     paddingVertical: 20,
     borderRadius: sizes.radius,
+    paddingHorizontal: 100,
   },
   notFoundText: {
     color: `${colors.light1}${hexTransparencies[80]}`,
@@ -612,15 +616,13 @@ const filmOverview = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
   },
-  icon: {
-    container: {
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    text: {
-      color: colors.light1,
-      marginLeft: 8,
-    },
+  iconContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconText: {
+    color: colors.light1,
+    marginLeft: 8,
   },
 });
 

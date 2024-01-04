@@ -76,6 +76,7 @@ export const getMovieDetails = async (
 
 export interface Movie {
   id: number;
+  title: string;
 }
 
 interface MovieResponse {

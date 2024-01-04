@@ -23,8 +23,7 @@ import tmdbApi, {
 import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
 import ScreenLoading from "../components/ScreenLoading";
-
-const { colors, sizes, hexTransparencies } = global.config.style;
+import { colors, sizes, hexTransparencies } from "../config";
 
 const DetailsScreen = ({ route }) => {
   const {
@@ -403,22 +402,22 @@ const DetailsScreen = ({ route }) => {
   const otherComponents = [<MovieImages />, <Recommended />];
 
   return (
-      <ScrollView>
-        <View style={screen.container}>
-          {components.map((item, key) => (
-            <View style={{ marginBottom: 15 }} key={key}>
-              {item}
-            </View>
-          ))}
-        </View>
-        <View style={screen.otherContainer}>
-          {otherComponents.map((item, key) => (
-            <View style={{ marginBottom: 15 }} key={key}>
-              {item}
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+    <ScrollView>
+      <View style={screen.container}>
+        {components.map((item, key) => (
+          <View style={{ marginBottom: 15 }} key={key}>
+            {item}
+          </View>
+        ))}
+      </View>
+      <View style={screen.otherContainer}>
+        {otherComponents.map((item, key) => (
+          <View style={{ marginBottom: 15 }} key={key}>
+            {item}
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 

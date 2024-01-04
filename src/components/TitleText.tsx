@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleProp, TextStyle, Text } from "react-native";
-
-const { colors } = global.config.style;
+import { colors } from "../config";
 
 interface TitleTextProps {
   text: string;

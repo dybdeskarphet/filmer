@@ -3,8 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import "../../config";
 import { Shadow } from "react-native-shadow-2";
-
-const { colors, sizes, hexTransparencies } = global.config.style;
+import { colors, hexTransparencies, sizes } from "../../config";
 
 interface HomeTabBarProps {
   state: {
@@ -16,7 +15,7 @@ interface HomeTabBarProps {
   };
   descriptors: {
     [key: string]: {
-      options: any; 
+      options: any;
     };
   };
   navigation: {
@@ -43,7 +42,13 @@ const HomeTabBar: React.FC<HomeTabBarProps> = ({
 
             const isFocused = state.index === index;
 
-            type IconName = "home" | "home-outline" | "person" | "person-outline" | "compass" | "compass-outline";
+            type IconName =
+              | "home"
+              | "home-outline"
+              | "person"
+              | "person-outline"
+              | "compass"
+              | "compass-outline";
             let icon: IconName;
 
             switch (route.name) {
@@ -74,7 +79,6 @@ const HomeTabBar: React.FC<HomeTabBarProps> = ({
               }
             };
 
-
             return (
               <TouchableOpacity
                 key={index}
@@ -82,11 +86,7 @@ const HomeTabBar: React.FC<HomeTabBarProps> = ({
                 style={styles.icon}
               >
                 {isFocused ? (
-                  <Ionicons
-                    name={icon}
-                    size={24}
-                    color={colors.light1}
-                  />
+                  <Ionicons name={icon} size={24} color={colors.light1} />
                 ) : (
                   <Ionicons
                     name={icon}

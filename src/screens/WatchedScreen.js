@@ -3,8 +3,7 @@ import { View, TextInput, FlatList, StyleSheet, Text } from "react-native";
 import MovieContext from "../context/MovieContext";
 import { getMovieDetails } from "../api/tmdb";
 import DetailedCard from "../components/DetailedCard";
-
-const { colors, sizes, hexTransparencies } = global.config.style;
+import { colors, sizes, hexTransparencies } from "../config";
 
 const WatchedScreen = () => {
   const [query, setQuery] = useState("");

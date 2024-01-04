@@ -1,11 +1,9 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import React from "react";
-import "../config";
+import { colors } from "../config";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-
-const { colors } = global.config.style;
 
 const SearchButton = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -26,7 +24,7 @@ type ButtonType = "search";
 
 interface HeaderProps {
   title: string;
-  buttons: ButtonType[];
+  buttons?: ButtonType[];
 }
 
 const Header = ({ title, buttons = [] }: HeaderProps) => {

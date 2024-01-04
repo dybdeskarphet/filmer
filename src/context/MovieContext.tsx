@@ -2,8 +2,8 @@ import React, { createContext, useReducer, useEffect, ReactNode } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface MovieState {
-  willWatchList: string[];
-  watchedList: string[];
+  willWatchList: number[];
+  watchedList: number[];
 }
 
 type MovieAction =
@@ -13,7 +13,7 @@ type MovieAction =
         | "ADD_TO_WATCHED"
         | "REMOVE_FROM_WILL_WATCH"
         | "REMOVE_FROM_WATCHED";
-      payload: string;
+      payload: number;
     }
   | { type: "INITIALIZE_STATE"; payload: MovieState };
 
@@ -63,10 +63,10 @@ const reducer = (state: MovieState, action: MovieAction) => {
 
 interface MovieContextType {
   state: MovieState;
-  addToWillWatchList: (movieId: string) => void;
-  addToWatchedList: (movieId: string) => void;
-  removeFromWillWatchList: (movieId: string) => void;
-  removeFromWatchedList: (movieId: string) => void;
+  addToWillWatchList: (movieId: number) => void;
+  addToWatchedList: (movieId: number) => void;
+  removeFromWillWatchList: (movieId: number) => void;
+  removeFromWatchedList: (movieId: number) => void;
 }
 
 const defualtContextValue: MovieContextType = {
@@ -123,19 +123,19 @@ export const MovieProvider: React.FC<MovieProviderProps> = ({ children }) => {
     saveData();
   }, [state]);
 
-  const addToWillWatchList = (movieId: string) => {
+  const addToWillWatchList = (movieId: number) => {
     dispatch({ type: "ADD_TO_WILL_WATCH", payload: movieId });
   };
 
-  const addToWatchedList = (movieId: string) => {
+  const addToWatchedList = (movieId: number) => {
     dispatch({ type: "ADD_TO_WATCHED", payload: movieId });
   };
 
-  const removeFromWillWatchList = (movieId: string) => {
+  const removeFromWillWatchList = (movieId: number) => {
     dispatch({ type: "REMOVE_FROM_WILL_WATCH", payload: movieId });
   };
 
-  const removeFromWatchedList = (movieId: string) => {
+  const removeFromWatchedList = (movieId: number) => {
     dispatch({ type: "REMOVE_FROM_WATCHED", payload: movieId });
   };
 

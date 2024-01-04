@@ -11,9 +11,7 @@ import {
 import DetailedCard from "../components/DetailedCard";
 import tmdbApi, { Movie } from "../api/tmdb";
 import { Feather } from "@expo/vector-icons";
-import "../config";
-
-const { colors, sizes, hexTransparencies } = global.config.style;
+import {colors, sizes, hexTransparencies} from "../config";
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -54,6 +52,7 @@ const SearchScreen = () => {
         <FlatList
           data={searchResults}
           contentContainerStyle={{ paddingTop: 70 }}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item, index }) => {
             return (

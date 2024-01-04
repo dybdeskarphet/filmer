@@ -15,8 +15,8 @@ import WatchedScreen from "./src/screens/WatchedScreen";
 import WillWatchScreen from "./src/screens/WillWatchScreen";
 import GenreDiscoverScreen from "./src/screens/GenreDiscoverScreen";
 import CategoriesScreen from "./src/screens/CategoriesScreen";
+import { colors } from "./src/config";
 
-const { colors } = global.config.style;
 const Stack = createNativeStackNavigator();
 const HomeTab = createBottomTabNavigator();
 

@@ -1,7 +1,6 @@
 import { View, Text, ActivityIndicator } from "react-native";
 import React from "react";
-
-const { colors } = global.config.style;
+import { colors } from "../config";
 
 interface ScreenLoadingProps {
   message: string;

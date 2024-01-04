@@ -13,8 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { getMovieDetails, MovieDetails } from "../api/tmdb";
 import { Shadow } from "react-native-shadow-2";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-
-const { colors, sizes } = global.config.style;
+import { colors, sizes } from "../config";
 
 interface DetailedCardProps {
   id: number;

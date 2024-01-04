@@ -15,8 +15,7 @@ import {
 import { fetchGenres, Genre } from "../api/tmdb";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-
-const { colors } = global.config.style;
+import { colors } from "../config";
 
 const CategoriesScreen = () => {
   const [genres, setGenres] = useState<Genre[]>([]);

@@ -5,8 +5,7 @@ import Header from "../../components/Header";
 import { SimpleGrid } from "react-native-super-grid";
 import BigButton from "../../components/BigButton";
 import { MaterialIcons } from "@expo/vector-icons";
-
-const { colors, sizes, hexTransparencies } = global.config.style;
+import { colors, sizes, hexTransparencies } from '../../config'
 
 interface ButtonData {
   title: string;

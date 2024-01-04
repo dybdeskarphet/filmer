@@ -12,8 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import TextTicker from "react-native-text-ticker";
 import { getMovieDetails, MovieDetails } from "../api/tmdb";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-
-const { colors, sizes } = global.config.style;
+import { colors, sizes } from "../config";
 
 interface SimpleCardProps {
   id: number;

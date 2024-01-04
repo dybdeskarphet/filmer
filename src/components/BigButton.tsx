@@ -2,16 +2,14 @@ import { Text, TouchableOpacity } from "react-native";
 import React, { ReactElement } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-
-
-const { hexTransparencies, sizes, colors } = global.config.style;
+import { hexTransparencies, sizes, colors } from "../config";
 
 interface Props {
   icon: ReactElement;
   nav: string;
   title: string;
   navParams?: object;
-};
+}
 
 const BigButton = ({ icon, nav, title, navParams = {} }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();

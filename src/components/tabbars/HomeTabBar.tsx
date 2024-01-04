@@ -6,7 +6,34 @@ import { Shadow } from "react-native-shadow-2";
 
 const { colors, sizes, hexTransparencies } = global.config.style;
 
-const HomeTabBar = ({ state, descriptors, navigation }) => {
+interface HomeTabBarProps {
+  state: {
+    index: number;
+    routes: Array<{
+      key: string;
+      name: string;
+    }>;
+  };
+  descriptors: {
+    [key: string]: {
+      options: any; 
+    };
+  };
+  navigation: {
+    navigate: (name: string) => void;
+    emit: (args: {
+      type: string;
+      target: string;
+      canPreventDefault: boolean;
+    }) => { defaultPrevented: boolean };
+  };
+}
+
+const HomeTabBar: React.FC<HomeTabBarProps> = ({
+  state,
+  descriptors,
+  navigation,
+}) => {
   return (
     <View style={styles.containerShadow}>
       <Shadow stretch={true} distance={10}>
@@ -16,7 +43,8 @@ const HomeTabBar = ({ state, descriptors, navigation }) => {
 
             const isFocused = state.index === index;
 
-            let icon = "";
+            type IconName = "home" | "home-outline" | "person" | "person-outline" | "compass" | "compass-outline";
+            let icon: IconName;
 
             switch (route.name) {
               case "Home":
@@ -46,6 +74,7 @@ const HomeTabBar = ({ state, descriptors, navigation }) => {
               }
             };
 
+
             return (
               <TouchableOpacity
                 key={index}
@@ -53,7 +82,11 @@ const HomeTabBar = ({ state, descriptors, navigation }) => {
                 style={styles.icon}
               >
                 {isFocused ? (
-                  <Ionicons name={icon} size={24} color={colors.light1} />
+                  <Ionicons
+                    name={icon}
+                    size={24}
+                    color={colors.light1}
+                  />
                 ) : (
                   <Ionicons
                     name={icon}

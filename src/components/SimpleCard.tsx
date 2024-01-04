@@ -10,14 +10,19 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import TextTicker from "react-native-text-ticker";
-import { getMovieDetails } from "../api/tmdb"; 
+import { getMovieDetails, MovieDetails } from "../api/tmdb";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 const { colors, sizes } = global.config.style;
 
-const SimpleCard = ({ id }) => {
-  const navigation = useNavigation();
-  const [filmDetails, setFilmDetails] = useState(null);
-  const [error, setError] = useState(null);
+interface SimpleCardProps {
+  id: number;
+}
+
+const SimpleCard = ({ id }: SimpleCardProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const [filmDetails, setFilmDetails] = useState<MovieDetails | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -60,7 +65,7 @@ const SimpleCard = ({ id }) => {
       <Image
         style={styles.image}
         source={{
-          uri: `https://image.tmdb.org/t/p/w500${filmDetails.poster_path}`,
+          uri: `https://image.tmdb.org/t/p/w500${filmDetails?.poster_path}`,
         }}
       />
       <LinearGradient
@@ -76,7 +81,7 @@ const SimpleCard = ({ id }) => {
             marqueeDelay={2500}
             style={styles.title}
           >
-            {filmDetails ? filmDetails.title : ""}
+            {filmDetails?.title || ""}
           </TextTicker>
         </View>
       </LinearGradient>

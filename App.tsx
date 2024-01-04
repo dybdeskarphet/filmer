@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./src/screens/hometab_screens/HomeScreen";
 import DetailsScreen from "./src/screens/DetailsScreen";
-import "./src/config";
 import { MovieProvider } from "./src/context/MovieContext";
 import SearchScreen from "./src/screens/SearchScreen";
 import HomeTabBar from "./src/components/tabbars/HomeTabBar";
@@ -16,6 +15,7 @@ import WillWatchScreen from "./src/screens/WillWatchScreen";
 import GenreDiscoverScreen from "./src/screens/GenreDiscoverScreen";
 import CategoriesScreen from "./src/screens/CategoriesScreen";
 import { colors } from "./src/config";
+import { HomeTabBarProps } from "./src/components/tabbars/HomeTabBar";
 
 const Stack = createNativeStackNavigator();
 const HomeTab = createBottomTabNavigator();
@@ -26,7 +26,7 @@ const HomeTabs: React.FC = () => {
       screenOptions={{
         headerShown: false,
       }}
-      tabBar={(props) => <HomeTabBar {...props} />}
+      tabBar={(props) => <HomeTabBar {...(props as HomeTabBarProps)} />}
     >
       <HomeTab.Screen name="Home" component={HomeScreen} />
       <HomeTab.Screen name="Discover" component={DiscoverScreen} />
@@ -35,7 +35,7 @@ const HomeTabs: React.FC = () => {
   );
 };
 
-interface RouteParams {
+export interface RouteParams {
   name: string;
 }
 
@@ -85,7 +85,9 @@ const App: React.FC = () => {
               component={WillWatchScreen}
             />
             <Stack.Screen
-              options={({ route }) => ({ title: (route.params as RouteParams).name })}
+              options={({ route }) => ({
+                title: (route.params as RouteParams).name,
+              })}
               name="GenreDiscover"
               component={GenreDiscoverScreen}
             />

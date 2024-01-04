@@ -1,14 +1,28 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, ReactNode } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const MovieContext = createContext();
+interface MovieState {
+  willWatchList: string[];
+  watchedList: string[];
+}
 
-const initialState = {
+type MovieAction =
+  | {
+      type:
+        | "ADD_TO_WILL_WATCH"
+        | "ADD_TO_WATCHED"
+        | "REMOVE_FROM_WILL_WATCH"
+        | "REMOVE_FROM_WATCHED";
+      payload: string;
+    }
+  | { type: "INITIALIZE_STATE"; payload: MovieState };
+
+const initialState: MovieState = {
   willWatchList: [],
   watchedList: [],
 };
 
-const reducer = (state, action) => {
+const reducer = (state: MovieState, action: MovieAction) => {
   switch (action.type) {
     case "ADD_TO_WILL_WATCH":
       // Check for duplicate item before adding to the list
@@ -47,7 +61,29 @@ const reducer = (state, action) => {
   }
 };
 
-export const MovieProvider = ({ children }) => {
+interface MovieContextType {
+  state: MovieState;
+  addToWillWatchList: (movieId: string) => void;
+  addToWatchedList: (movieId: string) => void;
+  removeFromWillWatchList: (movieId: string) => void;
+  removeFromWatchedList: (movieId: string) => void;
+}
+
+const defualtContextValue: MovieContextType = {
+  state: initialState,
+  addToWillWatchList: () => {},
+  addToWatchedList: () => {},
+  removeFromWillWatchList: () => {},
+  removeFromWatchedList: () => {},
+};
+
+const MovieContext = createContext<MovieContextType>(defualtContextValue);
+
+interface MovieProviderProps {
+  children: ReactNode;
+}
+
+export const MovieProvider: React.FC<MovieProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -87,19 +123,19 @@ export const MovieProvider = ({ children }) => {
     saveData();
   }, [state]);
 
-  const addToWillWatchList = (movie) => {
-    dispatch({ type: "ADD_TO_WILL_WATCH", payload: movie });
+  const addToWillWatchList = (movieId: string) => {
+    dispatch({ type: "ADD_TO_WILL_WATCH", payload: movieId });
   };
 
-  const addToWatchedList = (movie) => {
-    dispatch({ type: "ADD_TO_WATCHED", payload: movie });
+  const addToWatchedList = (movieId: string) => {
+    dispatch({ type: "ADD_TO_WATCHED", payload: movieId });
   };
 
-  const removeFromWillWatchList = (movieId) => {
+  const removeFromWillWatchList = (movieId: string) => {
     dispatch({ type: "REMOVE_FROM_WILL_WATCH", payload: movieId });
   };
 
-  const removeFromWatchedList = (movieId) => {
+  const removeFromWatchedList = (movieId: string) => {
     dispatch({ type: "REMOVE_FROM_WATCHED", payload: movieId });
   };
 

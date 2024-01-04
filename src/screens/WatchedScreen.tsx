@@ -4,18 +4,21 @@ import MovieContext from "../context/MovieContext";
 import { getMovieDetails } from "../api/tmdb";
 import DetailedCard from "../components/DetailedCard";
 import { colors, sizes, hexTransparencies } from "../config";
+import { Movie } from "../api/tmdb";
 
 const WatchedScreen = () => {
-  const [query, setQuery] = useState("");
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState<string>("");
+  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { state } = useContext(MovieContext);
   const { watchedList } = state;
 
   const fetchWatchedMoviesDetails = async () => {
     setIsLoading(true);
     try {
-      const movieDetailsPromises = watchedList.map((id) => getMovieDetails(id));
+      const movieDetailsPromises = watchedList.map((id: number) =>
+        getMovieDetails(id)
+      );
       const moviesDetails = await Promise.all(movieDetailsPromises);
       setFilteredMovies(moviesDetails);
     } catch (error) {
@@ -29,7 +32,7 @@ const WatchedScreen = () => {
     fetchWatchedMoviesDetails();
   }, [watchedList]);
 
-  const handleSearch = (text) => {
+  const handleSearch = (text: string) => {
     setQuery(text);
     if (text) {
       const lowerCaseQuery = text.toLowerCase();
@@ -92,7 +95,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "center",
-    justifyContent: "",
     width: "100%",
     backgroundColor: `${colors.dark2}${hexTransparencies[96]}`,
     color: colors.light1,

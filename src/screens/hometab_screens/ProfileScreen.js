@@ -35,6 +35,7 @@ const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: colors.dark1,
     flex: 1,
   },
 });

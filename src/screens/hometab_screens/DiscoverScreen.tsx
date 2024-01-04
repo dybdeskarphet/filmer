@@ -42,25 +42,26 @@ const DiscoverScreen = () => {
   const components = [<DiscoverScreenButtons />];
 
   return (
-      <CollapsibleHeaderScrollView
-        CollapsibleHeaderComponent={<Header title="Filmer" />}
-        headerHeight={60}
-        showsVerticalScrollIndicator={false}
-        statusBarHeight={Platform.OS === "ios" ? 20 : 0}
-        headerContainerBackgroundColor={colors.dark1}
-        style={screen.container}
-      >
-        {components.map((item, index) => {
-          return <View style={{ marginBottom: 15 }}>{item}</View>;
-        })}
-      </CollapsibleHeaderScrollView>
+    <CollapsibleHeaderScrollView
+      CollapsibleHeaderComponent={<Header title="Filmer" />}
+      headerHeight={60}
+      showsVerticalScrollIndicator={false}
+      statusBarHeight={Platform.OS === "ios" ? 20 : 0}
+      headerContainerBackgroundColor={colors.dark1}
+      style={screen.container}
+    >
+      {components.map((item, index) => {
+        return <View style={{ marginBottom: 15 }}>{item}</View>;
+      })}
+    </CollapsibleHeaderScrollView>
   );
 };
 
 const screen = StyleSheet.create({
   container: {
-    marginHorizontal: 15,
-    marginTop: 16,
+    backgroundColor: colors.dark1,
+    paddingHorizontal: 15,
+    paddingTop: 16,
   },
 });
 

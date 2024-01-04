@@ -12,14 +12,14 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { fetchGenres } from "../api/tmdb";
+import { fetchGenres, Genre } from "../api/tmdb";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 const { colors } = global.config.style;
 
 const CategoriesScreen = () => {
-  const [genres, setGenres] = useState([]);
+  const [genres, setGenres] = useState<Genre[]>([]);
 
   useEffect(() => {
     const loadGenres = async () => {
@@ -128,7 +128,11 @@ const CategoriesScreen = () => {
     ),
   };
 
-  const IconComponent = ({ name }) => {
+  interface IconComponentProps {
+    name: string;
+  }
+
+  const IconComponent = ({ name }: IconComponentProps) => {
     const icon = genreIconMapping[name] || (
       <MaterialIcons
         name="local-movies"
@@ -140,7 +144,12 @@ const CategoriesScreen = () => {
     return icon;
   };
 
-  const GenresButton = ({ id, name }) => {
+  interface GenresButtonProps {
+    id: number;
+    name: string;
+  }
+
+  const GenresButton = ({ id, name }: GenresButtonProps) => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
     return (
@@ -171,11 +180,15 @@ const CategoriesScreen = () => {
           contentContainerStyle={{
             marginTop: 10,
           }}
-          renderItem={({ item, index }) => (
-            <View key={index}>
-              <GenresButton id={item.id} name={item.name} />
-            </View>
-          )}
+          renderItem={({ item, index }) => {
+            const namePrimitive: string = item.name.toString();
+
+            return (
+              <View key={index}>
+                <GenresButton id={item.id} name={namePrimitive} />
+              </View>
+            );
+          }}
         />
       </View>
     );

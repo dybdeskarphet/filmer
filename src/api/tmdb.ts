@@ -10,7 +10,7 @@ tmdbApi.defaults.params = {
   api_key: API_KEY,
 };
 
-interface Genre {
+export interface Genre {
   id: number;
   name: String;
 }
@@ -162,7 +162,7 @@ export const fetchRecommendedMovies = async (
 export interface Provider {
   logo_path: string;
   provider_name: string;
-  provider_id
+  provider_id;
 }
 
 interface ProviderResponse {

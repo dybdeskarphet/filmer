@@ -1,8 +1,7 @@
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, StyleSheet, Platform } from "react-native";
 import React from "react";
 import {
   CollapsibleHeaderScrollView,
-  CollapsibleHeaderSectionList,
 } from "react-native-collapsible-header-views";
 import Header from "../../components/Header";
 import { colors, sizes } from "../../config";

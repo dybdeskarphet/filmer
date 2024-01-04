@@ -1,7 +1,8 @@
 import { Text, TouchableOpacity } from "react-native";
 import React, { ReactElement } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
+
 
 const { hexTransparencies, sizes, colors } = global.config.style;
 

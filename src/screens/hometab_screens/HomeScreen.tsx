@@ -18,7 +18,7 @@ import { CollapsibleHeaderScrollView } from "react-native-collapsible-header-vie
 import Header from "../../components/Header";
 import { useNavigation } from "@react-navigation/core";
 import { Entypo } from "@expo/vector-icons";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 const { colors, sizes, hexTransparencies } = global.config.style;
 

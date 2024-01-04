@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import { SimpleGrid } from "react-native-super-grid";
 import BigButton from "../../components/BigButton";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors, sizes, hexTransparencies } from '../../config'
+import { colors, sizes, hexTransparencies } from "../../config";
 
 interface ButtonData {
   title: string;
@@ -50,7 +50,11 @@ const DiscoverScreen = () => {
       style={screen.container}
     >
       {components.map((item, index) => {
-        return <View style={{ marginBottom: 15 }}>{item}</View>;
+        return (
+          <View key={index} style={{ marginBottom: 15 }}>
+            {item}
+          </View>
+        );
       })}
     </CollapsibleHeaderScrollView>
   );

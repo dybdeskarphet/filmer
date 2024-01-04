@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import "../../config";
 import SimpleCard from "../../components/SimpleCard";
 import { fetchPopularMovies, getMovieDetails, Movie } from "../../api/tmdb";
 import TitleText from "../../components/TitleText";
@@ -19,8 +18,7 @@ import Header from "../../components/Header";
 import { useNavigation } from "@react-navigation/core";
 import { Entypo } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-
-const { colors, sizes, hexTransparencies } = global.config.style;
+import { colors, sizes, hexTransparencies } from "../../config";
 
 const PopularMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -216,28 +214,28 @@ const HomeScreen = () => {
   ];
 
   return (
-      <CollapsibleHeaderScrollView
-        CollapsibleHeaderComponent={
-          <Header title="Filmer" buttons={["search"]} />
-        }
-        headerHeight={60}
-        showsVerticalScrollIndicator={false}
-        statusBarHeight={Platform.OS === "ios" ? 20 : 0}
-        headerContainerBackgroundColor={colors.dark1}
-        style={screen.container}
-      >
-        <PopularMovies />
-        <View style={screen.otherSections}>
-          {components.map((item, key) => {
-            return (
-              <View key={key} style={{ marginBottom: 15 }}>
-                {item}
-              </View>
-            );
-          })}
-        </View>
-        <View style={{ marginBottom: sizes.tabbarSpace }} />
-      </CollapsibleHeaderScrollView>
+    <CollapsibleHeaderScrollView
+      CollapsibleHeaderComponent={
+        <Header title="Filmer" buttons={["search"]} />
+      }
+      headerHeight={60}
+      showsVerticalScrollIndicator={false}
+      statusBarHeight={Platform.OS === "ios" ? 20 : 0}
+      headerContainerBackgroundColor={colors.dark1}
+      style={screen.container}
+    >
+      <PopularMovies />
+      <View style={screen.otherSections}>
+        {components.map((item, key) => {
+          return (
+            <View key={key} style={{ marginBottom: 15 }}>
+              {item}
+            </View>
+          );
+        })}
+      </View>
+      <View style={{ marginBottom: sizes.tabbarSpace }} />
+    </CollapsibleHeaderScrollView>
   );
 };
 

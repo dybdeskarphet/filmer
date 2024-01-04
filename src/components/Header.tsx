@@ -3,11 +3,12 @@ import React from "react";
 import "../config";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 const { colors } = global.config.style;
 
 const SearchButton = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
     <TouchableOpacity
@@ -21,18 +22,25 @@ const SearchButton = () => {
   );
 };
 
-const Header = ({ title, buttons = [] }) => {
-  let buttonComponents = [];
+type ButtonType = "search";
 
-  if (buttons.length > 0) {
-    buttons.forEach((button) => {
+interface HeaderProps {
+  title: string;
+  buttons: ButtonType[];
+}
+
+const Header = ({ title, buttons = [] }: HeaderProps) => {
+  const buttonComponents = buttons
+    .map((button) => {
       switch (button) {
         case "search":
-          buttonComponents.push(<SearchButton />);
+          <SearchButton />;
           break;
+        default:
+          return null;
       }
-    });
-  }
+    })
+    .filter((component) => component !== null);
 
   return (
     <View style={styles.container}>
@@ -45,11 +53,7 @@ const Header = ({ title, buttons = [] }) => {
           {title}
         </Text>
       </View>
-      <View style={styles.buttons}>
-        {buttonComponents.map((item, key) => {
-          return <View key={key}>{item}</View>;
-        })}
-      </View>
+      <View style={styles.buttons}>{buttonComponents}</View>
     </View>
   );
 };

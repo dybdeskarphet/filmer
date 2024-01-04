@@ -10,16 +10,21 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import TextTicker from "react-native-text-ticker";
 import { useNavigation } from "@react-navigation/native";
-import { getMovieDetails } from "../api/tmdb"; 
+import { getMovieDetails, MovieDetails } from "../api/tmdb";
 import { Shadow } from "react-native-shadow-2";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 const { colors, sizes } = global.config.style;
 
-const DetailedCard = ({ id }) => {
-  const navigation = useNavigation();
-  const [filmDetails, setFilmDetails] = useState(null);
+interface DetailedCardProps {
+  id: number;
+}
+
+const DetailedCard = ({ id }: DetailedCardProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const [filmDetails, setFilmDetails] = useState<MovieDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchFilmDetails = async () => {
@@ -74,12 +79,12 @@ const DetailedCard = ({ id }) => {
                 marqueeDelay={2500}
                 style={styles.title}
               >
-                {filmDetails ? filmDetails.title : ""}
+                {filmDetails?.title || ""}
               </TextTicker>
             </View>
             <View style={styles.ratingContainer}>
               <Text style={styles.ratingText}>
-                {filmDetails ? filmDetails.vote_average.toFixed(1) : "0.0"}/10
+                {filmDetails ? filmDetails.vote_average?.toFixed(1) : "0.0"}/10
               </Text>
               <FontAwesome
                 name="star-half-full"
@@ -89,7 +94,7 @@ const DetailedCard = ({ id }) => {
             </View>
           </View>
           <Text numberOfLines={4} style={styles.desc}>
-            {filmDetails ? filmDetails.overview : ""}
+            {filmDetails?.overview || ""}
           </Text>
         </View>
       </TouchableOpacity>

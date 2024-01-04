@@ -3,7 +3,11 @@ import React from "react";
 
 const { colors } = global.config.style;
 
-const ScreenLoading = ({message}) => {
+interface ScreenLoadingProps {
+  message: string;
+}
+
+const ScreenLoading = ({ message }: ScreenLoadingProps) => {
   return (
     <View
       style={{

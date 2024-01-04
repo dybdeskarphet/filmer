@@ -2,10 +2,7 @@ import React, { useEffect } from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  createNativeStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./src/screens/hometab_screens/HomeScreen";
 import DetailsScreen from "./src/screens/DetailsScreen";
 import "./src/config";
@@ -17,12 +14,13 @@ import DiscoverScreen from "./src/screens/hometab_screens/DiscoverScreen";
 import WatchedScreen from "./src/screens/WatchedScreen";
 import WillWatchScreen from "./src/screens/WillWatchScreen";
 import GenreDiscoverScreen from "./src/screens/GenreDiscoverScreen";
+import CategoriesScreen from "./src/screens/CategoriesScreen";
 
 const { colors } = global.config.style;
 const Stack = createNativeStackNavigator();
 const HomeTab = createBottomTabNavigator();
 
-const HomeTabs = () => {
+const HomeTabs: React.FC = () => {
   return (
     <HomeTab.Navigator
       screenOptions={{
@@ -37,7 +35,11 @@ const HomeTabs = () => {
   );
 };
 
-const App = () => {
+interface RouteParams {
+  name: string;
+}
+
+const App: React.FC = () => {
   return (
     <NavigationContainer>
       <MovieProvider>
@@ -83,10 +85,11 @@ const App = () => {
               component={WillWatchScreen}
             />
             <Stack.Screen
-              options={({route}) => ({title: route.params.name})}
+              options={({ route }) => ({ title: (route.params as RouteParams).name })}
               name="GenreDiscover"
               component={GenreDiscoverScreen}
             />
+            <Stack.Screen name="Categories" component={CategoriesScreen} />
           </Stack.Navigator>
         </View>
       </MovieProvider>

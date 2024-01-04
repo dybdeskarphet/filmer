@@ -9,15 +9,15 @@ import {
   Image,
 } from "react-native";
 import DetailedCard from "../components/DetailedCard";
-import tmdbApi, { searchMovies } from "../api/tmdb";
+import tmdbApi, { Movie } from "../api/tmdb";
 import { Feather } from "@expo/vector-icons";
 import "../config";
 
 const { colors, sizes, hexTransparencies } = global.config.style;
 
 const SearchScreen = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<Movie[]>([]);
 
   // Function to handle search
   const handleSearch = async () => {
@@ -26,7 +26,7 @@ const SearchScreen = () => {
         params: { query: searchQuery },
       });
       setSearchResults(response.data.results);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error searching movies:", error);
     }
   };
@@ -46,43 +46,43 @@ const SearchScreen = () => {
   };
 
   return (
-      <View style={styles.container}>
-        {searchQuery == "" && searchResults.length == 0 ? (
-          <EmptySearchPlaceholder />
-        ) : (
-          // ! If you move this FlatList to another component, keyboard closes on every keystroke.
-          <FlatList
-            data={searchResults}
-            contentContainerStyle={{ paddingTop: 70 }}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item, index }) => {
-              return (
-                <React.Fragment>
-                  <DetailedCard id={item.id} />
+    <View style={styles.container}>
+      {searchQuery == "" && searchResults.length == 0 ? (
+        <EmptySearchPlaceholder />
+      ) : (
+        // ! If you move this FlatList to another component, keyboard closes on every keystroke.
+        <FlatList
+          data={searchResults}
+          contentContainerStyle={{ paddingTop: 70 }}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item, index }) => {
+            return (
+              <React.Fragment>
+                <DetailedCard id={item.id} />
 
-                  {index !== searchResults.length - 1 && (
-                    <View style={{ margin: 6 }} />
-                  )}
-                </React.Fragment>
-              );
-            }}
-          />
-        )}
-        <View style={styles.searchInputContainer}>
-          <TextInput
-            style={styles.searchInput}
-            cursorColor={colors.light2}
-            placeholder="Search for movies..."
-            placeholderTextColor={colors.light3}
-            value={searchQuery}
-            onChangeText={(text) => setSearchQuery(text)}
-            onSubmitEditing={handleSearch}
-          />
-          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-            <Feather name="search" size={24} color={colors.light2} />
-          </TouchableOpacity>
-        </View>
+                {index !== searchResults.length - 1 && (
+                  <View style={{ margin: 6 }} />
+                )}
+              </React.Fragment>
+            );
+          }}
+        />
+      )}
+      <View style={styles.searchInputContainer}>
+        <TextInput
+          style={styles.searchInput}
+          cursorColor={colors.light2}
+          placeholder="Search for movies..."
+          placeholderTextColor={colors.light3}
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
+          onSubmitEditing={handleSearch}
+        />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+          <Feather name="search" size={24} color={colors.light2} />
+        </TouchableOpacity>
       </View>
+    </View>
   );
 };
 
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "center",
-    justifyContent: "",
     width: "100%",
     backgroundColor: `${colors.dark0}${hexTransparencies[95]}`,
     color: colors.light1,

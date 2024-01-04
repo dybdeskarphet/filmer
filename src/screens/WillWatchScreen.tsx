@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, TextInput, FlatList, StyleSheet, Text } from "react-native";
 import MovieContext from "../context/MovieContext";
-import { getMovieDetails } from "../api/tmdb";
+import { getMovieDetails, Movie } from "../api/tmdb";
 import DetailedCard from "../components/DetailedCard";
 import { colors, sizes, hexTransparencies } from "../config";
 
 const WillWatchScreen = () => {
-  const [query, setQuery] = useState("");
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState<string>("");
+  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { state } = useContext(MovieContext);
   const { willWatchList } = state;
 
   const fetchWillWatchMoviesDetails = async () => {
     setIsLoading(true);
     try {
-      const movieDetailsPromises = willWatchList.map((id) =>
+      const movieDetailsPromises = willWatchList.map((id: number) =>
         getMovieDetails(id)
       );
       const moviesDetails = await Promise.all(movieDetailsPromises);
@@ -31,7 +31,7 @@ const WillWatchScreen = () => {
     fetchWillWatchMoviesDetails();
   }, [willWatchList]);
 
-  const handleSearch = (text) => {
+  const handleSearch = (text: string) => {
     setQuery(text);
     if (text) {
       const lowerCaseQuery = text.toLowerCase();
@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "center",
-    justifyContent: "",
     width: "100%",
     backgroundColor: `${colors.dark2}${hexTransparencies[96]}`,
     color: colors.light1,

@@ -5,7 +5,7 @@ import "../../config";
 import { Shadow } from "react-native-shadow-2";
 import { colors, hexTransparencies, sizes } from "../../config";
 
-interface HomeTabBarProps {
+export interface HomeTabBarProps {
   state: {
     index: number;
     routes: Array<{

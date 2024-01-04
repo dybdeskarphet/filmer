@@ -1,6 +1,5 @@
 import { View, StyleSheet, Platform } from "react-native";
 import React from "react";
-import CustomSafeAreaView from "../../components/CustomSafeAreaView";
 import { CollapsibleHeaderScrollView } from "react-native-collapsible-header-views";
 import Header from "../../components/Header";
 import { SimpleGrid } from "react-native-super-grid";
@@ -43,7 +42,6 @@ const DiscoverScreen = () => {
   const components = [<DiscoverScreenButtons />];
 
   return (
-    <CustomSafeAreaView>
       <CollapsibleHeaderScrollView
         CollapsibleHeaderComponent={<Header title="Filmer" />}
         headerHeight={60}
@@ -56,7 +54,6 @@ const DiscoverScreen = () => {
           return <View style={{ marginBottom: 15 }}>{item}</View>;
         })}
       </CollapsibleHeaderScrollView>
-    </CustomSafeAreaView>
   );
 };
 

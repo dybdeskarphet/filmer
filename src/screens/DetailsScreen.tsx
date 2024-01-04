@@ -20,7 +20,6 @@ import tmdbApi, {
   MovieDetails,
   Movie,
 } from "../api/tmdb"; // Import your API module
-import CustomSafeAreaView from "../components/CustomSafeAreaView";
 import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
 import ScreenLoading from "../components/ScreenLoading";
@@ -404,7 +403,6 @@ const DetailsScreen = ({ route }) => {
   const otherComponents = [<MovieImages />, <Recommended />];
 
   return (
-    <CustomSafeAreaView>
       <ScrollView>
         <View style={screen.container}>
           {components.map((item, key) => (
@@ -421,7 +419,6 @@ const DetailsScreen = ({ route }) => {
           ))}
         </View>
       </ScrollView>
-    </CustomSafeAreaView>
   );
 };
 

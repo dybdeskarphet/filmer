@@ -12,7 +12,6 @@ import DetailedCard from "../components/DetailedCard";
 import tmdbApi, { searchMovies } from "../api/tmdb";
 import { Feather } from "@expo/vector-icons";
 import "../config";
-import CustomSafeAreaView from "../components/CustomSafeAreaView";
 
 const { colors, sizes, hexTransparencies } = global.config.style;
 
@@ -47,7 +46,6 @@ const SearchScreen = () => {
   };
 
   return (
-    <CustomSafeAreaView>
       <View style={styles.container}>
         {searchQuery == "" && searchResults.length == 0 ? (
           <EmptySearchPlaceholder />
@@ -85,7 +83,6 @@ const SearchScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </CustomSafeAreaView>
   );
 };
 

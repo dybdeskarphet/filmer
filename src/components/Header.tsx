@@ -29,10 +29,10 @@ interface HeaderProps {
 
 const Header = ({ title, buttons = [] }: HeaderProps) => {
   const buttonComponents = buttons
-    .map((button) => {
-      switch (button) {
+    .map((buttonType, index) => {
+      switch (buttonType) {
         case "search":
-          <SearchButton />;
+          return <SearchButton key={`button-${buttonType}-${index}`} />;
           break;
         default:
           return null;

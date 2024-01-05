@@ -19,6 +19,7 @@ interface Colors {
   green: string;
   cyan: string;
   yellow: string;
+  light_cyan: string;
 }
 
 export const colors: Colors = {
@@ -32,6 +33,7 @@ export const colors: Colors = {
   green: "#9CCC65",
   cyan: "#4DB6AC",
   yellow: "#FFEE58",
+  light_cyan: "#92d3cc",
 };
 
 export const sizes: Sizes = {

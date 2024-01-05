@@ -15,7 +15,8 @@ import {
 import { fetchGenres, Genre } from "../api/tmdb";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-import { colors } from "../config";
+import { colors, sizes } from "../config";
+import { Shadow } from "react-native-shadow-2";
 
 const CategoriesScreen = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -152,18 +153,24 @@ const CategoriesScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
     return (
-      <TouchableOpacity
-        style={genreSection.buttonContainer}
-        onPress={() => {
-          console.log("Genre is pressed: " + name);
-          navigation.navigate("GenreDiscover", { id, name });
-        }}
+      <Shadow
+        offset={[15, 10]}
+        style={genreSection.shadowContainer}
+        stretch={true}
       >
-        <View style={genreSection.iconContainer}>
-          <IconComponent name={name} />
-        </View>
-        <Text style={genreSection.buttonText}>{name}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={genreSection.buttonContainer}
+          onPress={() => {
+            console.log("Genre is pressed: " + name);
+            navigation.navigate("GenreDiscover", { id, name });
+          }}
+        >
+          <View style={genreSection.iconContainer}>
+            <IconComponent name={name} />
+          </View>
+          <Text style={genreSection.buttonText}>{name}</Text>
+        </TouchableOpacity>
+      </Shadow>
     );
   };
 
@@ -178,6 +185,7 @@ const CategoriesScreen = () => {
           data={genres}
           contentContainerStyle={{
             marginTop: 10,
+            paddingBottom: 20,
           }}
           renderItem={({ item, index }) => {
             const namePrimitive: string = item.name.toString();
@@ -210,15 +218,21 @@ const screen = StyleSheet.create({
 const genreSection = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
-    paddingVertical: 25,
+    paddingVertical: 15,
     paddingLeft: 30,
+    borderRadius: sizes.radius,
     alignItems: "center",
+    backgroundColor: colors.dark0,
+  },
+  shadowContainer: {
+    marginVertical: 10,
+    marginHorizontal: 15,
   },
   buttonText: {
     fontSize: 18,
     color: colors.light1,
     left: 40,
-    fontWeight: "500",
+    fontWeight: "400",
   },
   iconContainer: {
     left: 10,

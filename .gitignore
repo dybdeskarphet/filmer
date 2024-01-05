@@ -70,3 +70,7 @@ yarn-error.log
 
 # Ignore Expo-related files
 .expo
+
+# ignore vscode related files
+.VSCodeCounter
+.vscode

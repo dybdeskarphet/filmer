@@ -187,10 +187,50 @@ const DetailsScreen = ({ route }) => {
         <Text style={filmOverview.desc}>{overview}</Text>
         <View style={filmOverview.iconsContainer}>{icons}</View>
         <View style={filmOverview.bottomSectionContainer}>
+          <GenreTags />
           <BottomSection />
         </View>
       </View>
     );
+  };
+
+  interface GenreTagProps {
+    genreName: string;
+  }
+
+  const GenreTag = ({ genreName }: GenreTagProps) => {
+    return (
+      <View style={genreSection.tag}>
+        <FontAwesome name="hashtag" size={12} color={colors.light3} />
+        <Text style={genreSection.tagText}>{genreName}</Text>
+      </View>
+    );
+  };
+
+  const GenreTags = () => {
+    if (genres.length > 1) {
+      return (
+        <View style={genreSection.viewContainer}>
+          <FlatList
+            data={genres}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, index }) => {
+              const namePrimitive: string = item.name.toString();
+              return (
+                <View style={{ flexDirection: "row" }}>
+                  <GenreTag key={index} genreName={namePrimitive} />
+
+                  {index !== genres.length - 1 && (
+                    <View style={{ margin: 3 }} />
+                  )}
+                </View>
+              );
+            }}
+          />
+        </View>
+      );
+    }
   };
 
   // Bottom section, the buttons
@@ -345,35 +385,37 @@ const DetailsScreen = ({ route }) => {
   };
 
   const MovieImages = () => {
-    return (
-      <View>
-        <TitleText style={movieImages.title} text="Images" />
-        <View style={movieImages.flatlistWrapper}>
-          <FlatList
-            data={images}
-            keyExtractor={(item) => item.file_path.toString()}
-            horizontal
-            contentContainerStyle={movieImages.flatlistContainer}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item, index }) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  style={movieImages.imageContainer}
-                >
-                  <Image
-                    style={movieImages.image}
-                    source={{
-                      uri: `https://image.tmdb.org/t/p/w500${item.file_path}`,
-                    }}
-                  />
-                </TouchableOpacity>
-              );
-            }}
-          />
+    if (images !== null && images.length > 0) {
+      return (
+        <View>
+          <TitleText style={movieImages.title} text="Images" />
+          <View style={movieImages.flatlistWrapper}>
+            <FlatList
+              data={images}
+              keyExtractor={(item) => item.file_path.toString()}
+              horizontal
+              contentContainerStyle={movieImages.flatlistContainer}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={movieImages.imageContainer}
+                  >
+                    <Image
+                      style={movieImages.image}
+                      source={{
+                        uri: `https://image.tmdb.org/t/p/w500${item.file_path}`,
+                      }}
+                    />
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
   };
 
   const Recommended = () => {
@@ -565,6 +607,26 @@ const recommended = StyleSheet.create({
     borderTopLeftRadius: sizes.radius,
     borderBottomLeftRadius: sizes.radius,
     marginLeft: 15,
+  },
+});
+
+const genreSection = StyleSheet.create({
+  tag: {
+    padding: 8,
+    backgroundColor: colors.dark1,
+    borderRadius: sizes.radius,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tagText: {
+    fontSize: 12,
+    color: colors.light1,
+    marginLeft: 3,
+  },
+  viewContainer: {
+    marginBottom: 14,
+    alignItems: "center",
   },
 });
 

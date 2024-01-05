@@ -91,7 +91,13 @@ const App: React.FC = () => {
               name="GenreDiscover"
               component={GenreDiscoverScreen}
             />
-            <Stack.Screen name="Categories" component={CategoriesScreen} />
+            <Stack.Screen
+              options={({ route }) => ({
+                title: "Categories",
+              })}
+              name="Categories"
+              component={CategoriesScreen}
+            />
           </Stack.Navigator>
         </View>
       </MovieProvider>

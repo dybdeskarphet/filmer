@@ -24,6 +24,7 @@ import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
 import ScreenLoading from "../components/ScreenLoading";
 import { colors, sizes, hexTransparencies } from "../config";
+import Gallery from "react-native-awesome-gallery";
 
 const DetailsScreen = ({ route }) => {
   const {
@@ -46,6 +47,7 @@ const DetailsScreen = ({ route }) => {
     null
   );
   const [images, setImages] = useState<ImageData[] | null>(null);
+  const [gallery, setGallery] = useState<boolean>(false);
   const [watchProviders, setWatchProviders] =
     useState<ProcessedProviders | null>(null);
 
@@ -401,6 +403,7 @@ const DetailsScreen = ({ route }) => {
                   <TouchableOpacity
                     key={index}
                     style={movieImages.imageContainer}
+                    onPress={() => setGallery(true)}
                   >
                     <Image
                       style={movieImages.image}

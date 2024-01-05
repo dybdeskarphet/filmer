@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 
 import {
@@ -17,6 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { colors, sizes } from "../config";
 import { Shadow } from "react-native-shadow-2";
+import { FlatGrid } from "react-native-super-grid";
+import ScreenLoading from "../components/ScreenLoading";
 
 const CategoriesScreen = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -153,11 +149,7 @@ const CategoriesScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
     return (
-      <Shadow
-        offset={[15, 10]}
-        style={genreSection.shadowContainer}
-        stretch={true}
-      >
+      <Shadow style={genreSection.shadowContainer} stretch={true}>
         <TouchableOpacity
           style={genreSection.buttonContainer}
           onPress={() => {
@@ -176,12 +168,16 @@ const CategoriesScreen = () => {
 
   const Genres = () => {
     if (!genres || genres.length === 0) {
-      return <Text>Loading genres...</Text>; // Or any other placeholder
+      return (
+        <View style={{ flex: 1 }}>
+          <ScreenLoading message="Loading genres..." />
+        </View>
+      ); // Or any other placeholder
     }
 
     return (
       <View>
-        <FlatList
+        <FlatGrid
           data={genres}
           contentContainerStyle={{
             marginTop: 10,
@@ -217,27 +213,21 @@ const screen = StyleSheet.create({
 
 const genreSection = StyleSheet.create({
   buttonContainer: {
-    flexDirection: "row",
-    paddingVertical: 15,
-    paddingLeft: 30,
+    flexDirection: "column",
+    height: 100,
     borderRadius: sizes.radius,
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: colors.dark0,
   },
-  shadowContainer: {
-    marginVertical: 10,
-    marginHorizontal: 15,
-  },
+  shadowContainer: {},
   buttonText: {
-    fontSize: 18,
+    fontSize: 14,
     color: colors.light1,
-    left: 40,
     fontWeight: "400",
   },
   iconContainer: {
-    left: 10,
-    height: 26,
-    width: 33,
+    marginBottom: 8,
   },
 });
 

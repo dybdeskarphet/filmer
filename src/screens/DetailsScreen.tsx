@@ -447,7 +447,7 @@ const DetailsScreen = ({ route }) => {
   const otherComponents = [<MovieImages />, <Recommended />];
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: colors.dark1, flex: 1 }}>
       <View style={screen.container}>
         {components.map((item, key) => (
           <View style={{ marginBottom: 15 }} key={key}>

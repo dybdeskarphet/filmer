@@ -74,3 +74,6 @@ yarn-error.log
 # ignore vscode related files
 .VSCodeCounter
 .vscode
+
+# exclude app.config.ts because PROJET_ID env doesn't work
+app.config.ts

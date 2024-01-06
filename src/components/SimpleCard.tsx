@@ -42,7 +42,7 @@ const SimpleCard = ({ id }: SimpleCardProps) => {
 
   if (isLoading) {
     return (
-      <View style={[styles.container, { height: 200 }]}>
+      <View style={styles.container}>
         <ActivityIndicator size="large" color={colors.light1} />
       </View>
     );

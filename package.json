@@ -33,7 +33,9 @@
     "react-native-shadow-2": "^7.0.8",
     "react-native-super-grid": "^5.0.0",
     "react-native-text-ticker": "^1.14.0",
-    "react-native-web": "~0.19.6"
+    "react-native-web": "~0.19.6",
+    "react-native-webview": "^13.6.4",
+    "react-native-youtube-iframe": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

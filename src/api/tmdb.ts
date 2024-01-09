@@ -83,6 +83,28 @@ interface MovieResponse {
   results: Movie[];
 }
 
+interface VideosResponse {
+  results: Video[];
+}
+
+export interface Video {
+  id: string;
+  name: string;
+  key: string;
+  site: string;
+}
+
+export const getVideos = async (movieId: number): Promise<Video[]> => {
+  try {
+    const response = await tmdbApi.get<VideosResponse>(
+      `movie/${movieId}/videos`
+    );
+    return response.data.results;
+  } catch (error) {
+    console.error("Error fetching videos:", error);
+  }
+};
+
 export const fetchPopularMovies = async (): Promise<Movie[]> => {
   try {
     const response = await tmdbApi.get<MovieResponse>("discover/movie", {

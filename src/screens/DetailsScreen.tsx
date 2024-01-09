@@ -19,12 +19,15 @@ import tmdbApi, {
   Provider,
   MovieDetails,
   Movie,
+  Video,
+  getVideos,
 } from "../api/tmdb"; // Import your API module
 import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
 import ScreenLoading from "../components/ScreenLoading";
 import { colors, sizes, hexTransparencies } from "../config";
 import Gallery from "react-native-awesome-gallery";
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const DetailsScreen = ({ route }) => {
   const {
@@ -46,6 +49,8 @@ const DetailsScreen = ({ route }) => {
   const [recommendedMovies, setRecommendedMovies] = useState<Movie[] | null>(
     null
   );
+
+  const [videos, setVideos] = useState<Video[] | null>(null);
   const [images, setImages] = useState<ImageData[] | null>(null);
   const [gallery, setGallery] = useState<boolean>(false);
   const [watchProviders, setWatchProviders] =
@@ -88,7 +93,7 @@ const DetailsScreen = ({ route }) => {
     return providers;
   };
 
-  // Fetch the movie details for the FilmOverview component
+  // Fetch all the movie details
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -97,16 +102,19 @@ const DetailsScreen = ({ route }) => {
           recommendedMoviesData,
           imagesData,
           watchProvidersData,
+          videosData,
         ] = await Promise.all([
           getMovieDetails(id),
           fetchRecommendedMovies(id),
           fetchImages(id),
           fetchWatchProviders(id),
+          getVideos(id),
         ]);
 
         setMovieDetails(movieDetailsData);
         setRecommendedMovies(recommendedMoviesData);
         setImages(imagesData);
+        setVideos(videosData);
 
         if (watchProvidersData) {
           const processedProviders: ProcessedProviders =
@@ -149,52 +157,7 @@ const DetailsScreen = ({ route }) => {
     ? `${baseImageUrl}${posterSize}/${poster_path}`
     : null;
 
-  // Film overview, the first component
-  const FilmOverview = () => {
-    const icons = [
-      <View style={filmOverview.iconContainer} key="star">
-        <FontAwesome name="star-half-full" size={24} color={colors.yellow} />
-        <Text style={filmOverview.iconText}>{vote_average.toFixed(1)}/10</Text>
-      </View>,
-      <View style={filmOverview.iconContainer} key="user">
-        <FontAwesome name="user" size={24} color={colors.cyan} />
-        <Text style={filmOverview.iconText}>{vote_count} votes</Text>
-      </View>,
-    ];
-
-    return (
-      <View style={filmOverview.container}>
-        {poster_path != null && (
-          <Image style={filmOverview.image} source={{ uri: image }} />
-        )}
-        <Text style={filmOverview.title}>{title}</Text>
-        <View style={filmOverview.yearAndGenres}>
-          {release_date != "" && (
-            <Text style={filmOverview.releaseDate}>
-              {release_date.match(/^(\d{4})/g)}
-            </Text>
-          )}
-          {genres.length > 0 && (
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <FontAwesome
-                style={{ marginHorizontal: 8 }}
-                name="circle"
-                size={5}
-                color={colors.light3}
-              />
-              <Text style={filmOverview.genres}>{genres[0].name}</Text>
-            </View>
-          )}
-        </View>
-        <Text style={filmOverview.desc}>{overview}</Text>
-        <View style={filmOverview.iconsContainer}>{icons}</View>
-        <View style={filmOverview.bottomSectionContainer}>
-          <GenreTags />
-          <BottomSection />
-        </View>
-      </View>
-    );
-  };
+  // * Components Part
 
   interface GenreTagProps {
     genreName: string;
@@ -306,6 +269,53 @@ const DetailsScreen = ({ route }) => {
     );
   };
 
+  // Film overview, the first component
+  const FilmOverview = () => {
+    const icons = [
+      <View style={filmOverview.iconContainer} key="star">
+        <FontAwesome name="star-half-full" size={24} color={colors.yellow} />
+        <Text style={filmOverview.iconText}>{vote_average.toFixed(1)}/10</Text>
+      </View>,
+      <View style={filmOverview.iconContainer} key="user">
+        <FontAwesome name="user" size={24} color={colors.cyan} />
+        <Text style={filmOverview.iconText}>{vote_count} votes</Text>
+      </View>,
+    ];
+
+    return (
+      <View style={filmOverview.container}>
+        {poster_path != null && (
+          <Image style={filmOverview.image} source={{ uri: image }} />
+        )}
+        <Text style={filmOverview.title}>{title}</Text>
+        <View style={filmOverview.yearAndGenres}>
+          {release_date != "" && (
+            <Text style={filmOverview.releaseDate}>
+              {release_date.match(/^(\d{4})/g)}
+            </Text>
+          )}
+          {genres.length > 0 && (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <FontAwesome
+                style={{ marginHorizontal: 8 }}
+                name="circle"
+                size={5}
+                color={colors.light3}
+              />
+              <Text style={filmOverview.genres}>{genres[0].name}</Text>
+            </View>
+          )}
+        </View>
+        <Text style={filmOverview.desc}>{overview}</Text>
+        <View style={filmOverview.iconsContainer}>{icons}</View>
+        <View style={filmOverview.bottomSectionContainer}>
+          <GenreTags />
+          <BottomSection />
+        </View>
+      </View>
+    );
+  };
+
   const Platforms = () => {
     // Check if both buyOrRent and streamingOn lists are empty
     const noProvidersAvailable =
@@ -386,6 +396,23 @@ const DetailsScreen = ({ route }) => {
     );
   };
 
+  const MovieVideo = () => {
+    if (videos !== null && videos.length > 0) {
+      return (
+        <View>
+          <TitleText style={movieVideo.title} text="Trailer" />
+          <View style={movieVideo.container}>
+            <YoutubePlayer
+              webViewStyle={movieVideo.iframe}
+              height={190}
+              videoId={videos[0].key}
+            />
+          </View>
+        </View>
+      );
+    }
+  };
+
   const MovieImages = () => {
     if (images !== null && images.length > 0) {
       return (
@@ -442,7 +469,7 @@ const DetailsScreen = ({ route }) => {
     }
   };
 
-  const components = [<FilmOverview />, <Platforms />];
+  const components = [<FilmOverview />, <Platforms />, <MovieVideo />];
 
   const otherComponents = [<MovieImages />, <Recommended />];
 
@@ -550,6 +577,25 @@ const movieImages = StyleSheet.create({
     overflow: "hidden",
     marginLeft: 15,
     paddingRight: 14,
+  },
+});
+
+const movieVideo = StyleSheet.create({
+  title: {
+    marginBottom: 15,
+  },
+  container: {
+    borderRadius: sizes.radius,
+    borderWidth: 1,
+    borderColor: colors.dark2,
+    backgroundColor: "black",
+    overflow: "hidden",
+  },
+  iframe: {
+    borderRadius: sizes.radius,
+    borderWidth: 1,
+    borderColor: colors.dark2,
+    overflow: "hidden",
   },
 });
 

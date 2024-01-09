@@ -397,7 +397,11 @@ const DetailsScreen = ({ route }) => {
   };
 
   const MovieVideo = () => {
-    if (videos !== null && videos.length > 0) {
+    if (
+      videos !== null &&
+      videos.length > 0 &&
+      videos.some((item) => item.site == "YouTube")
+    ) {
       return (
         <View>
           <TitleText style={movieVideo.title} text="Trailer" />

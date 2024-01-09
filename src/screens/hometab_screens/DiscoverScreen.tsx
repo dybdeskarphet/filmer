@@ -21,6 +21,11 @@ const DiscoverScreen = () => {
         nav: "Categories",
         icon: <MaterialIcons name="category" size={24} color={colors.cyan} />,
       },
+      {
+        title: "Search",
+        nav: "Search",
+        icon: <MaterialIcons name="search" size={24} color={colors.cyan} />,
+      },
     ];
 
     return (

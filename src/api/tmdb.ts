@@ -92,6 +92,8 @@ export interface Video {
   name: string;
   key: string;
   site: string;
+  type: string;
+  published_at: string;
 }
 
 export const getVideos = async (movieId: number): Promise<Video[]> => {

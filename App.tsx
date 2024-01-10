@@ -65,7 +65,9 @@ const App: React.FC = () => {
               component={HomeTabs}
             />
             <Stack.Screen
-              options={{ title: "Movie Details" }}
+              options={{
+                title: "Movie Details",
+              }}
               name="Details"
               component={DetailsScreen}
             />

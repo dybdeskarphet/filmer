@@ -397,24 +397,34 @@ const DetailsScreen = ({ route }) => {
   };
 
   const MovieVideo = () => {
-    if (
-      videos !== null &&
-      videos.length > 0 &&
-      videos.some((item) => item.site == "YouTube")
-    ) {
-      return (
-        <View>
-          <TitleText style={movieVideo.title} text="Trailer" />
-          <View style={movieVideo.container}>
-            <YoutubePlayer
-              webViewStyle={movieVideo.iframe}
-              height={190}
-              videoId={videos[0].key}
-            />
+    if (videos !== null && videos.length > 0) {
+      const latestTrailer = videos.reduce((latest, video) => {
+        if (video.site === "YouTube" && video.type === "Trailer") {
+          const videoDate = new Date(video.published_at).getTime();
+          if (!latest || videoDate > new Date(latest.published_at).getTime()) {
+            return video;
+          }
+        }
+        return latest;
+      }, null);
+
+      if (latestTrailer) {
+        return (
+          <View>
+            <TitleText style={movieVideo.title} text="Trailer" />
+            <View style={movieVideo.container}>
+              <YoutubePlayer
+                webViewStyle={movieVideo.iframe}
+                height={190}
+                videoId={latestTrailer.key}
+              />
+            </View>
           </View>
-        </View>
-      );
+        );
+      }
     }
+
+    return null;
   };
 
   const MovieImages = () => {
@@ -596,10 +606,8 @@ const movieVideo = StyleSheet.create({
     overflow: "hidden",
   },
   iframe: {
-    borderRadius: sizes.radius,
-    borderWidth: 1,
-    borderColor: colors.dark2,
-    overflow: "hidden",
+    // ! Never delete this, check the related issue: https://github.com/LonelyCpp/react-native-youtube-iframe/issues/110
+    opacity: 0.99,
   },
 });
 

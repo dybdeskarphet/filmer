@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   FlatList,
+  Dimensions,
 } from "react-native";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import MovieContext from "../context/MovieContext";
@@ -26,8 +27,10 @@ import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
 import ScreenLoading from "../components/ScreenLoading";
 import { colors, sizes, hexTransparencies } from "../config";
-import Gallery from "react-native-awesome-gallery";
 import YoutubePlayer from "react-native-youtube-iframe";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
 const DetailsScreen = ({ route }) => {
   const {
@@ -52,7 +55,6 @@ const DetailsScreen = ({ route }) => {
 
   const [videos, setVideos] = useState<Video[] | null>(null);
   const [images, setImages] = useState<ImageData[] | null>(null);
-  const [gallery, setGallery] = useState<boolean>(false);
   const [watchProviders, setWatchProviders] =
     useState<ProcessedProviders | null>(null);
 
@@ -113,7 +115,18 @@ const DetailsScreen = ({ route }) => {
 
         setMovieDetails(movieDetailsData);
         setRecommendedMovies(recommendedMoviesData);
-        setImages(imagesData);
+
+        if (imagesData) {
+          const imagesFullUrl: ImageData[] = imagesData.map((item) => {
+            return {
+              ...item,
+              file_path: `https://image.tmdb.org/t/p/w500${item.file_path}`,
+            };
+          });
+
+          setImages(imagesFullUrl);
+        }
+
         setVideos(videosData);
 
         if (watchProvidersData) {
@@ -428,6 +441,8 @@ const DetailsScreen = ({ route }) => {
   };
 
   const MovieImages = () => {
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
     if (images !== null && images.length > 0) {
       return (
         <View>
@@ -444,12 +459,21 @@ const DetailsScreen = ({ route }) => {
                   <TouchableOpacity
                     key={index}
                     style={movieImages.imageContainer}
-                    onPress={() => setGallery(true)}
+                    onPress={() =>
+                      navigation.navigate("Gallery", {
+                        imgList: images.map((obj) => {
+                          source: {
+                            uri: obj.file_path;
+                          }
+                        }),
+                        imgIndex: index,
+                      })
+                    }
                   >
                     <Image
                       style={movieImages.image}
                       source={{
-                        uri: `https://image.tmdb.org/t/p/w500${item.file_path}`,
+                        uri: item.file_path,
                       }}
                     />
                   </TouchableOpacity>
@@ -489,20 +513,22 @@ const DetailsScreen = ({ route }) => {
 
   return (
     <ScrollView style={{ backgroundColor: colors.dark1, flex: 1 }}>
-      <View style={screen.container}>
-        {components.map((item, key) => (
-          <View style={{ marginBottom: 15 }} key={key}>
-            {item}
-          </View>
-        ))}
-      </View>
-      <View style={screen.otherContainer}>
-        {otherComponents.map((item, key) => (
-          <View style={{ marginBottom: 15 }} key={key}>
-            {item}
-          </View>
-        ))}
-      </View>
+      <GestureHandlerRootView>
+        <View style={screen.container}>
+          {components.map((item, key) => (
+            <View style={{ marginBottom: 15 }} key={key}>
+              {item}
+            </View>
+          ))}
+        </View>
+        <View style={screen.otherContainer}>
+          {otherComponents.map((item, key) => (
+            <View style={{ marginBottom: 15 }} key={key}>
+              {item}
+            </View>
+          ))}
+        </View>
+      </GestureHandlerRootView>
     </ScrollView>
   );
 };

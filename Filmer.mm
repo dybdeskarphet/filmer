@@ -3,8 +3,8 @@
 <node TEXT="Filmer" LOCALIZED_STYLE_REF="AutomaticLayout.level.root" FOLDED="false" ID="ID_1090958577" CREATED="1409300609620" MODIFIED="1702687453852">
 <hook NAME="accessories/plugins/AutomaticLayout.properties" VALUE="ALL"/>
 <font BOLD="true"/>
-<hook NAME="MapStyle" background="#f9f9f8">
-    <properties show_icon_for_attributes="true" edgeColorConfiguration="#808080ff,#ff0000ff,#0000ffff,#00ff00ff,#ff00ffff,#00ffffff,#7c0000ff,#00007cff,#007c00ff,#7c007cff,#007c7cff,#7c7c00ff" show_note_icons="true" fit_to_viewport="false" associatedTemplateLocation="template:/light_nord_template.mm"/>
+<hook NAME="MapStyle" background="#f9f9f8" zoom="1.3">
+    <properties show_icon_for_attributes="true" edgeColorConfiguration="#808080ff,#ff0000ff,#0000ffff,#00ff00ff,#ff00ffff,#00ffffff,#7c0000ff,#00007cff,#007c00ff,#7c007cff,#007c7cff,#7c7c00ff" show_note_icons="true" associatedTemplateLocation="template:/light_nord_template.mm" fit_to_viewport="false"/>
 
 <map_styles>
 <stylenode LOCALIZED_TEXT="styles.root_node" STYLE="oval" UNIFORM_SHAPE="true" VGAP_QUANTITY="24 pt">
@@ -80,15 +80,68 @@
 </stylenode>
 </map_styles>
 </hook>
-<node TEXT="Screens" POSITION="bottom_or_right" ID="ID_1146514050" CREATED="1702687457765" MODIFIED="1702687459272">
-<node TEXT="Library" ID="ID_453795302" CREATED="1702687461269" MODIFIED="1702687465738">
-<node TEXT="Watched" ID="ID_21132272" CREATED="1702687469161" MODIFIED="1702687470934"/>
-<node TEXT="Will watch" ID="ID_1043176477" CREATED="1702687472821" MODIFIED="1702687480701"/>
-<node TEXT="Trending" ID="ID_933168830" CREATED="1702687501913" MODIFIED="1702687503317"/>
+<node TEXT="Screens" POSITION="bottom_or_right" ID="ID_1146514050" CREATED="1702687457765" MODIFIED="1705150377485">
+<node TEXT="Saved" ID="ID_1716497370" CREATED="1705147987893" MODIFIED="1705149200932">
+<node TEXT="Will Watch Screen" ID="ID_1982046908" CREATED="1705147996456" MODIFIED="1705148000687"/>
+<node TEXT="Watched Screen" ID="ID_915860915" CREATED="1705148003120" MODIFIED="1705148008213"/>
 </node>
-<node TEXT="Settings" ID="ID_1367650709" CREATED="1702687508945" MODIFIED="1702687528453"/>
-<node TEXT="Explore" ID="ID_477158616" CREATED="1702687531370" MODIFIED="1702687543218">
-<node TEXT="Explore page according to the watched films" ID="ID_527620797" CREATED="1702687554966" MODIFIED="1702687561532"/>
+<node TEXT="Search" ID="ID_1808126169" CREATED="1705148071601" MODIFIED="1705149259929">
+<hook NAME="AlwaysUnfoldedNode"/>
+<node TEXT="Search Bar" ID="ID_1504658329" CREATED="1705149663057" MODIFIED="1705149664996"/>
+<node TEXT="Search Results" ID="ID_935676329" CREATED="1705149666179" MODIFIED="1705149669693"/>
+</node>
+<node TEXT="Home" POSITION="bottom_or_right" ID="ID_453795302" CREATED="1702687461269" MODIFIED="1705149259929">
+<node TEXT="Trending" ID="ID_1454781829" CREATED="1705149289552" MODIFIED="1705149290826"/>
+<node TEXT="Will Watch" ID="ID_1678635896" CREATED="1705149293030" MODIFIED="1705149297806"/>
+<node TEXT="Watched" ID="ID_1549959334" CREATED="1705149299121" MODIFIED="1705149301086"/>
+</node>
+<node TEXT="Profile" POSITION="bottom_or_right" ID="ID_783896713" CREATED="1705148778640" MODIFIED="1705150377484">
+<node TEXT="Profile photo" ID="ID_1844052196" CREATED="1705149983838" MODIFIED="1705150002747"/>
+<node TEXT="Name and surname" ID="ID_1322554641" CREATED="1705150004197" MODIFIED="1705150007819"/>
+<node TEXT="Region" ID="ID_787135100" CREATED="1705150009544" MODIFIED="1705150011335"/>
+<node TEXT="Sync Archive Button" ID="ID_203435210" CREATED="1705150389222" MODIFIED="1705150414851"/>
+<node TEXT="Connect with ..." ID="ID_263554820" CREATED="1705150154747" MODIFIED="1705150283337"><richcontent TYPE="DETAILS">
+<html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Decide which connections will be available after connecting with Firebase
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node TEXT="Settings" POSITION="bottom_or_right" ID="ID_917979906" CREATED="1705150042692" MODIFIED="1705150043868"/>
+<node TEXT="Discover" POSITION="bottom_or_right" ID="ID_1283174794" CREATED="1705148183512" MODIFIED="1705148186923">
+<node TEXT="Discover Buttons" ID="ID_646843940" CREATED="1705149681620" MODIFIED="1705149914486">
+<node TEXT="Search" ID="ID_693641508" CREATED="1705149686993" MODIFIED="1705149914485"/>
+<node TEXT="Genres" ID="ID_1754044299" CREATED="1705149691151" MODIFIED="1705149698568"/>
+</node>
+<node TEXT="Components" POSITION="bottom_or_right" ID="ID_1575586018" CREATED="1705149929370" MODIFIED="1705149933939">
+<node TEXT="For You" POSITION="bottom_or_right" ID="ID_1487876033" CREATED="1705149720743" MODIFIED="1705150228757"><richcontent TYPE="DETAILS">
+<html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        according to saved
+      </li>
+      <li>
+        according to will watch if no saved movies
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node TEXT="Because you like ..." POSITION="bottom_or_right" ID="ID_270068155" CREATED="1705149885480" MODIFIED="1705149894607"/>
+<node TEXT="Because you like ... genre" POSITION="bottom_or_right" ID="ID_1563630010" CREATED="1705149905385" MODIFIED="1705149910689"/>
+</node>
 </node>
 </node>
 </node>

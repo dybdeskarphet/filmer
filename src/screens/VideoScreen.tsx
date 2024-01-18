@@ -31,8 +31,6 @@ const VideoScreen = ({ route }) => {
   }, []);
 
   const { videoId } = route.params;
-  const windowHeight = Dimensions.get("window").height;
-  const windowWidth = 1.778 * windowHeight;
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
@@ -42,8 +40,8 @@ const VideoScreen = ({ route }) => {
           renderToHardwareTextureAndroid: true,
         }}
         webViewStyle={movieVideo.iframe}
-        height={windowHeight}
-        width={windowWidth}
+        height={Dimensions.get("window").height}
+        width={1.778 * Dimensions.get("window").height}
         videoId={videoId}
       />
       <TouchableOpacity

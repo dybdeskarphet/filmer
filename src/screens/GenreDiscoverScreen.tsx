@@ -3,13 +3,7 @@ import React from "react";
 import { colors } from "../config";
 import { RouteParams } from "../../App";
 
-interface GenreDiscoverScreenProps {
-  route: {
-    params: RouteParams;
-  };
-}
-
-const GenreDiscoverScreen = ({ route }: GenreDiscoverScreenProps) => {
+const GenreDiscoverScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <Text>GenreDiscoverScreen</Text>

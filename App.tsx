@@ -16,6 +16,7 @@ import GenreDiscoverScreen from "./src/screens/GenreDiscoverScreen";
 import CategoriesScreen from "./src/screens/CategoriesScreen";
 import { colors } from "./src/config";
 import { HomeTabBarProps } from "./src/components/tabbars/HomeTabBar";
+import VideoScreen from "./src/screens/VideoScreen";
 
 const Stack = createNativeStackNavigator();
 const HomeTab = createBottomTabNavigator();
@@ -99,6 +100,14 @@ const App: React.FC = () => {
               })}
               name="Categories"
               component={CategoriesScreen}
+            />
+            <Stack.Screen
+              options={({ route }) => ({
+                title: "Trailer",
+                headerShown: false,
+              })}
+              name="Video"
+              component={VideoScreen}
             />
           </Stack.Navigator>
         </View>

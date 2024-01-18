@@ -27,7 +27,6 @@ import TitleText from "../components/TitleText";
 import SimpleCard from "../components/SimpleCard";
 import ScreenLoading from "../components/ScreenLoading";
 import { colors, sizes, hexTransparencies } from "../config";
-import YoutubePlayer from "react-native-youtube-iframe";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
@@ -410,6 +409,8 @@ const DetailsScreen = ({ route }) => {
   };
 
   const MovieVideo = () => {
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
     if (videos !== null && videos.length > 0) {
       const latestTrailer = videos.reduce((latest, video) => {
         if (video.site === "YouTube" && video.type === "Trailer") {
@@ -424,14 +425,19 @@ const DetailsScreen = ({ route }) => {
       if (latestTrailer) {
         return (
           <View>
-            <TitleText style={movieVideo.title} text="Trailer" />
-            <View style={movieVideo.container}>
-              <YoutubePlayer
-                webViewStyle={movieVideo.iframe}
-                height={190}
-                videoId={latestTrailer.key}
+            <TouchableOpacity
+              style={watchTrailer.container}
+              onPress={() =>
+                navigation.navigate("Video", { videoId: latestTrailer.key })
+              }
+            >
+              <MaterialCommunityIcons
+                name="movie-open-play"
+                size={36}
+                color={colors.light3}
               />
-            </View>
+              <Text style={watchTrailer.text}>Watch the trailer</Text>
+            </TouchableOpacity>
           </View>
         );
       }
@@ -507,7 +513,7 @@ const DetailsScreen = ({ route }) => {
     }
   };
 
-  const components = [<FilmOverview />, <Platforms />, <MovieVideo />];
+  const components = [<FilmOverview />, <MovieVideo />, <Platforms />];
 
   const otherComponents = [<MovieImages />, <Recommended />];
 
@@ -617,23 +623,6 @@ const movieImages = StyleSheet.create({
     overflow: "hidden",
     marginLeft: 15,
     paddingRight: 14,
-  },
-});
-
-const movieVideo = StyleSheet.create({
-  title: {
-    marginBottom: 15,
-  },
-  container: {
-    borderRadius: sizes.radius,
-    borderWidth: 1,
-    borderColor: colors.dark2,
-    backgroundColor: "black",
-    overflow: "hidden",
-  },
-  iframe: {
-    // ! Never delete this, check the related issue: https://github.com/LonelyCpp/react-native-youtube-iframe/issues/110
-    opacity: 0.99,
   },
 });
 
@@ -768,6 +757,23 @@ const filmOverview = StyleSheet.create({
   iconText: {
     color: colors.light1,
     marginLeft: 8,
+  },
+});
+
+const watchTrailer = StyleSheet.create({
+  container: {
+    backgroundColor: colors.dark0,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    borderRadius: sizes.radius,
+  },
+  text: {
+    fontSize: 16,
+    color: colors.light1,
+    fontWeight: "400",
+    marginLeft: 20,
   },
 });
 

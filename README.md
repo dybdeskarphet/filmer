@@ -2,7 +2,7 @@
 <img height="150" src="./assets/dino-with-title.png" alt="Girl in a jacket">
 </p>
 
-Filmer is an intuitive and feature-rich application for movie enthusiasts. Powered by The Movie Database (TMDB) API, it offers a seamless experience for exploring, tracking, and organizing your favorite movies. Whether you're looking to dive into a new film or keep track of your movie-watching journey, Filmer is the perfect companion for every cinema lover.
+Filmer is an intuitive and feature-rich application for movie enthusiasts. Powered by The Movie Database (TMDB) API, it offers a seamless experience for exploring, tracking, and organizing your favorite movies. Whether you're looking to dive into a new film or keep track of your movie-watching journey, Filmer is the perfect companion for every cinema lover
 
 ## Features
 

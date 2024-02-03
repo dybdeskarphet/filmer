@@ -33,7 +33,6 @@ const Header = ({ title, buttons = [] }: HeaderProps) => {
       switch (buttonType) {
         case "search":
           return <SearchButton key={`button-${buttonType}-${index}`} />;
-          break;
         default:
           return null;
       }

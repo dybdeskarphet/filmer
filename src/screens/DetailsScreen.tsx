@@ -513,22 +513,19 @@ const DetailsScreen = ({ route }) => {
     }
   };
 
-  const components = [<FilmOverview />, <MovieVideo />, <Platforms />];
-
-  const otherComponents = [<MovieImages />, <Recommended />];
+  const components = [
+    <FilmOverview />,
+    <Platforms />,
+    <MovieVideo />,
+    <MovieImages />,
+    <Recommended />,
+  ];
 
   return (
     <ScrollView style={{ backgroundColor: colors.dark1, flex: 1 }}>
       <GestureHandlerRootView>
         <View style={screen.container}>
           {components.map((item, key) => (
-            <View style={{ marginBottom: 15 }} key={key}>
-              {item}
-            </View>
-          ))}
-        </View>
-        <View style={screen.otherContainer}>
-          {otherComponents.map((item, key) => (
             <View style={{ marginBottom: 15 }} key={key}>
               {item}
             </View>
@@ -547,6 +544,7 @@ const screen = StyleSheet.create({
   },
   otherContainer: {
     flex: 1,
+    marginBottom: 100,
     backgroundColor: colors.dark1,
   },
 });
@@ -615,7 +613,6 @@ const movieImages = StyleSheet.create({
   flatlistWrapper: {
     borderRadius: sizes.radius,
     overflow: "hidden",
-    marginHorizontal: 15,
     paddingVertical: 15,
     backgroundColor: colors.dark0,
   },
@@ -633,6 +630,7 @@ const platforms = StyleSheet.create({
     color: colors.light3,
     marginTop: -3,
     marginBottom: 15,
+    minWidth: 200,
   },
   titles: {},
   container: {
@@ -682,7 +680,6 @@ const recommended = StyleSheet.create({
     overflow: "hidden",
     borderTopLeftRadius: sizes.radius,
     borderBottomLeftRadius: sizes.radius,
-    marginLeft: 15,
   },
 });
 

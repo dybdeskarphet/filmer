@@ -5,47 +5,66 @@ import {
   StatusBar,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import YoutubePlayer from "react-native-youtube-iframe";
 import { sizes, colors } from "../config";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
+import ErrorBoundary from "../ErrorBoundary";
 
 const VideoScreen = ({ route }) => {
-  StatusBar.setHidden(true);
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const [videoWidth, setVideoWidth] = useState(
+    1.778 * Dimensions.get("window").height
+  );
+  const [videoHeight, setVideoHeight] = useState(
+    Dimensions.get("window").height
+  );
 
   useEffect(() => {
-    const changeScreenOrientation = async () => {
-      await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.LANDSCAPE_LEFT
-      );
+    const lockOrientation = async () => {
+      try {
+        await ScreenOrientation.lockAsync(
+          ScreenOrientation.OrientationLock.LANDSCAPE
+        );
+
+        StatusBar.setHidden(true);
+        console.log("VideoScreen is focused, orientation locked.");
+      } catch (error) {
+        console.error("Error locking orientation:", error);
+      }
     };
 
-    changeScreenOrientation();
+    lockOrientation();
 
     return () => {
-      ScreenOrientation.unlockAsync();
+      console.log("VideoScreen is unfocused, unlocking orientation.");
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+      StatusBar.setHidden(false);
     };
   }, []);
 
   const { videoId } = route.params;
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
-    <View style={movieVideo.container}>
+    <View style={styles.container}>
       <YoutubePlayer
         webViewProps={{
           renderToHardwareTextureAndroid: true,
         }}
-        webViewStyle={movieVideo.iframe}
-        height={Dimensions.get("window").height}
-        width={1.778 * Dimensions.get("window").height}
+        webViewStyle={styles.iframe}
+        height={videoHeight}
+        width={videoWidth}
+        onReady={() => {
+          setVideoWidth(1.778 * Dimensions.get("window").height);
+          setVideoHeight(Dimensions.get("window").height);
+        }}
         videoId={videoId}
       />
       <TouchableOpacity
-        style={movieVideo.backButton}
+        style={styles.backButton}
         onPress={() => navigation.pop()}
       >
         <Ionicons name="arrow-back" size={24} color={colors.light1} />
@@ -53,7 +72,16 @@ const VideoScreen = ({ route }) => {
     </View>
   );
 };
-const movieVideo = StyleSheet.create({
+
+const VideoScreenWithBoundary = ({ route }) => {
+  return (
+    <ErrorBoundary>
+      <VideoScreen route={route} />
+    </ErrorBoundary>
+  );
+};
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
@@ -71,4 +99,4 @@ const movieVideo = StyleSheet.create({
   },
 });
 
-export default VideoScreen;
+export default VideoScreenWithBoundary;

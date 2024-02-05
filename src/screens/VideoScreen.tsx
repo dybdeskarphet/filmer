@@ -7,14 +7,21 @@ import {
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import YoutubePlayer from "react-native-youtube-iframe";
-import { sizes, colors } from "../config";
+import { colors } from "../config";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-import ErrorBoundary from "../ErrorBoundary";
 
-const VideoScreen = ({ route }) => {
+interface VideoScreenProps {
+  route: {
+    params: {
+      videoId: string;
+    };
+  };
+}
+
+const VideoScreen = ({ route }: VideoScreenProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [videoWidth, setVideoWidth] = useState(
     1.778 * Dimensions.get("window").height

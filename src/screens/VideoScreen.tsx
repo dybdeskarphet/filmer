@@ -73,14 +73,6 @@ const VideoScreen = ({ route }) => {
   );
 };
 
-const VideoScreenWithBoundary = ({ route }) => {
-  return (
-    <ErrorBoundary>
-      <VideoScreen route={route} />
-    </ErrorBoundary>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -99,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VideoScreenWithBoundary;
+export default VideoScreen;

@@ -10,7 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@expo/webpack-config": "^18.0.1",
+    "@expo/webpack-config": "^18.1.4",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
@@ -19,10 +19,10 @@
     "@types/react": "~18.0.27",
     "@types/react-native-dotenv": "^0.2.2",
     "axios": "^1.6.2",
-    "expo": "^48.0.16",
+    "expo": "^50.0.4",
     "expo-linear-gradient": "~12.1.2",
     "expo-screen-orientation": "~5.1.1",
-    "expo-splash-screen": "~0.18.2",
+    "expo-splash-screen": "~0.26.4",
     "expo-status-bar": "~1.4.4",
     "punycode": "^2.3.1",
     "react": "18.2.0",

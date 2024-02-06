@@ -1,17 +1,36 @@
-import { View, StyleSheet, Platform } from "react-native";
-import React from "react";
+import { View, StyleSheet, Platform, Text } from "react-native";
+import React, { useContext, useEffect } from "react";
 import { CollapsibleHeaderScrollView } from "react-native-collapsible-header-views";
 import Header from "../../components/Header";
 import { SimpleGrid } from "react-native-super-grid";
 import BigButton from "../../components/BigButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, sizes, hexTransparencies } from "../../config";
+import { requireNativeModule } from "expo";
+import TitleText from "src/components/TitleText";
+import { fetchPopularMoviesByGenre } from "src/api/tmdb";
 
 interface ButtonData {
   title: string;
   nav: string;
   icon: JSX.Element;
 }
+
+// useEffect(() => {
+//   const { state } = useContext(MovieContext);
+
+
+//   const recommendedByGenre = async () => {
+//     try {
+//       const data = await fetchPopularMoviesByGenre();
+//       setMovies(data as Movie[]);
+//     } catch (error) {
+//       console.error("Error while retrieving popular movies data: ", error);
+//     }
+//   };
+
+//   recommendedByGenre();
+// }, []);
 
 const DiscoverScreen = () => {
   const DiscoverScreenButtons = () => {
@@ -43,7 +62,18 @@ const DiscoverScreen = () => {
     );
   };
 
-  const components = [<DiscoverScreenButtons />];
+  const RecommendedByGenre = ({ genre }) => {
+    return (
+      <View style={recommendedByGenre.container}>
+        <TitleText
+          text={`Because you like ${genre}`}
+          style={recommendedByGenre.title}
+        />
+      </View>
+    );
+  };
+
+  const components = [<DiscoverScreenButtons />, <RecommendedByGenre />];
 
   return (
     <CollapsibleHeaderScrollView
@@ -56,7 +86,7 @@ const DiscoverScreen = () => {
     >
       {components.map((item, index) => {
         return (
-          <View key={index} style={{ marginBottom: 15 }}>
+          <View key={index} style={{ marginBottom: 10 }}>
             {item}
           </View>
         );
@@ -68,39 +98,16 @@ const DiscoverScreen = () => {
 const screen = StyleSheet.create({
   container: {
     backgroundColor: colors.dark1,
-    paddingHorizontal: 15,
     paddingTop: 16,
   },
 });
 
-const showMoreGenres = StyleSheet.create({
+const recommendedByGenre = StyleSheet.create({
   container: {
-    backgroundColor: `${colors.dark0}${hexTransparencies[80]}`,
     marginHorizontal: 15,
-    paddingVertical: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: sizes.radiusBig,
   },
-  text: {
-    color: `${colors.light1}${hexTransparencies[80]}`,
-  },
-});
-
-const genreSection = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: colors.dark0,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: colors.dark2,
-    borderRadius: 15,
-  },
-  buttonText: {
-    fontSize: 12,
-    color: colors.light1,
+  title: {
+    fontSize: 22,
   },
 });
 

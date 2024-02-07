@@ -8,10 +8,10 @@ import {
   Text,
   Image,
 } from "react-native";
-import DetailedCard from "../components/DetailedCard";
-import tmdbApi, { Movie } from "../api/tmdb";
+import DetailedCard from "../../components/DetailedCard";
+import tmdbApi, { Movie } from "../../api/tmdb";
 import { Feather } from "@expo/vector-icons";
-import {colors, sizes, hexTransparencies} from "../config";
+import { colors, sizes, hexTransparencies } from "../../config";
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -34,7 +34,7 @@ const SearchScreen = () => {
       <View style={styles.emptySearchPlaceholderContainer}>
         <Image
           style={styles.emptySearchPlaceholderImage}
-          source={require("../../assets/searchPlaceholder.png")}
+          source={require("../../../assets/searchPlaceholder.png")}
         />
         <Text style={styles.emptySearchPlaceholderText}>
           We are waiting for you...

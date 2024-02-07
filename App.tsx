@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./src/screens/hometab_screens/HomeScreen";
 import DetailsScreen from "./src/screens/DetailsScreen";
 import { MovieProvider } from "./src/context/MovieContext";
-import SearchScreen from "./src/screens/SearchScreen";
+import SearchScreen from "./src/screens/hometab_screens/SearchScreen";
 import HomeTabBar from "./src/components/tabbars/HomeTabBar";
 import ProfileScreen from "./src/screens/hometab_screens/ProfileScreen";
 import DiscoverScreen from "./src/screens/hometab_screens/DiscoverScreen";
@@ -30,6 +30,11 @@ const HomeTabs: React.FC = () => {
       tabBar={(props) => <HomeTabBar {...(props as HomeTabBarProps)} />}
     >
       <HomeTab.Screen name="Home" component={HomeScreen} />
+      <HomeTab.Screen
+        options={{ title: "Search Films" }}
+        name="Search"
+        component={SearchScreen}
+      />
       <HomeTab.Screen name="Discover" component={DiscoverScreen} />
       <HomeTab.Screen name="Profile" component={ProfileScreen} />
     </HomeTab.Navigator>
@@ -71,11 +76,6 @@ const App: React.FC = () => {
               }}
               name="Details"
               component={DetailsScreen}
-            />
-            <Stack.Screen
-              options={{ title: "Search Films" }}
-              name="Search"
-              component={SearchScreen}
             />
             <Stack.Screen
               options={{ title: "Watched Films" }}

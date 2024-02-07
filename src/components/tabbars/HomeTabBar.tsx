@@ -48,7 +48,9 @@ const HomeTabBar: React.FC<HomeTabBarProps> = ({
               | "person"
               | "person-outline"
               | "compass"
-              | "compass-outline";
+              | "compass-outline"
+              | "search"
+              | "search-outline";
             let icon: IconName;
 
             switch (route.name) {
@@ -60,6 +62,9 @@ const HomeTabBar: React.FC<HomeTabBarProps> = ({
                 break;
               case "Discover":
                 icon = "compass";
+                break;
+              case "Search":
+                icon = "search";
                 break;
             }
 
@@ -110,13 +115,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 11,
     alignSelf: "center",
-    width: "90%",
+    width: "92%",
   },
   container: {
     flexDirection: "row",
     justifyContent: "space-around",
     backgroundColor: `${colors.dark0}${hexTransparencies[95]}`,
-    borderRadius: sizes.radius,
+    borderRadius: sizes.radiusSmall,
     borderWidth: 1,
     borderColor: colors.dark2,
     alignItems: "center",

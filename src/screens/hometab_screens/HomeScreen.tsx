@@ -204,7 +204,6 @@ const Watched = ({ watchedList }: WatchedProps) => {
   );
 };
 
-// PopularMovies are not included because of a styling difference
 
 const HomeScreen = () => {
   const { state } = useContext(MovieContext);
@@ -215,9 +214,7 @@ const HomeScreen = () => {
 
   return (
     <CollapsibleHeaderScrollView
-      CollapsibleHeaderComponent={
-        <Header title="Filmer" buttons={["search"]} />
-      }
+      CollapsibleHeaderComponent={<Header title="Filmer" />}
       headerHeight={60}
       showsVerticalScrollIndicator={false}
       statusBarHeight={Platform.OS === "ios" ? 20 : 0}

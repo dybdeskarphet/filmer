@@ -6,9 +6,9 @@ import { SimpleGrid } from "react-native-super-grid";
 import BigButton from "../../components/BigButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors, sizes, hexTransparencies } from "../../config";
-import { requireNativeModule } from "expo";
 import TitleText from "src/components/TitleText";
-import { fetchPopularMoviesByGenre } from "src/api/tmdb";
+import { fetchPopularMoviesByGenre, getMovieDetails } from "src/api/tmdb";
+import MovieContext from "src/context/MovieContext";
 
 interface ButtonData {
   title: string;
@@ -16,23 +16,36 @@ interface ButtonData {
   icon: JSX.Element;
 }
 
-// useEffect(() => {
-//   const { state } = useContext(MovieContext);
-
-
-//   const recommendedByGenre = async () => {
-//     try {
-//       const data = await fetchPopularMoviesByGenre();
-//       setMovies(data as Movie[]);
-//     } catch (error) {
-//       console.error("Error while retrieving popular movies data: ", error);
-//     }
-//   };
-
-//   recommendedByGenre();
-// }, []);
-
 const DiscoverScreen = () => {
+  const { state } = useContext(MovieContext);
+  const watchedMovies = state.watchedList;
+  console.log(watchedMovies);
+  let genreList = [];
+
+  watchedMovies.forEach((movie) => {
+    useEffect(() => {
+      const fetchGenres = async () => {
+        try {
+          const data = await getMovieDetails(movie);
+          data.genres.forEach((genres) => {
+            if (genres.hasOwnProperty("id")) {
+              genreList.push(genres.id);
+            }
+          });
+          console.log(genreList);
+        } catch (error) {
+          console.error("Error while retrieving genre data: ", error);
+        }
+      };
+
+      fetchGenres();
+    }, []);
+  });
+
+  genreList.forEach((value, index) => {
+    useEffect(() => {});
+  });
+
   const DiscoverScreenButtons = () => {
     const buttons: ButtonData[] = [
       {
@@ -73,7 +86,10 @@ const DiscoverScreen = () => {
     );
   };
 
-  const components = [<DiscoverScreenButtons />, <RecommendedByGenre />];
+  const components = [
+    <DiscoverScreenButtons />,
+    <RecommendedByGenre genre="Drama" />,
+  ];
 
   return (
     <CollapsibleHeaderScrollView

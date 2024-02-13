@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   TextInput,
@@ -70,6 +70,7 @@ const SearchScreen = () => {
       <View style={styles.searchInputContainer}>
         <TextInput
           style={styles.searchInput}
+          autoFocus={true}
           cursorColor={colors.light2}
           placeholder="Search for movies..."
           placeholderTextColor={colors.light3}
@@ -100,10 +101,10 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: `${colors.dark0}${hexTransparencies[95]}`,
     color: colors.light1,
+    borderColor: colors.dark2,
     paddingLeft: 10,
     paddingRight: 15,
     borderRadius: sizes.radius,
-    borderColor: colors.dark2,
     borderWidth: 1,
   },
   searchInput: {

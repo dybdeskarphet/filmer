@@ -8,12 +8,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { colors, sizes, hexTransparencies, genres } from "../../config";
 import TitleText from "src/components/TitleText";
 import {
-  Movie,
   fetchPopularMoviesByGenre,
   getMovieDetails,
 } from "src/api/tmdb";
 import MovieContext from "src/context/MovieContext";
-import { useFocusEffect } from "@react-navigation/native";
 import SimpleCard from "src/components/SimpleCard";
 
 interface ButtonData {
@@ -107,6 +105,7 @@ const DiscoverScreen = () => {
       let currentIndex = array.length,
         randomIndex;
 
+      // Credits: StackOverflow guy
       // While there remain elements to shuffle.
       while (currentIndex > 0) {
         // Pick a remaining element.
@@ -138,10 +137,12 @@ const DiscoverScreen = () => {
 
     return (
       <View style={recommendedByGenre.container}>
-        <TitleText
-          text={`Because you like ${genres[genre]}`}
-          style={recommendedByGenre.title}
-        />
+        {genreList.length != 0 && (
+          <TitleText
+            text={`Because you like ${genres[genre]}`}
+            style={recommendedByGenre.title}
+          />
+        )}
         <FlatList
           data={moviesByGenre}
           keyExtractor={(item) => item.id.toString()}

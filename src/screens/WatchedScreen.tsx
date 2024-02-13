@@ -96,18 +96,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     width: "100%",
-    backgroundColor: `${colors.dark2}${hexTransparencies[96]}`,
-    color: colors.light1,
+    backgroundColor: `${colors.dark0}${hexTransparencies[96]}`,
+    color: colors.light3,
+    borderColor: colors.dark2,
     paddingLeft: 10,
     paddingRight: 15,
     borderRadius: sizes.radius,
-    borderColor: colors.light3,
     borderWidth: 1,
   },
   searchInput: {
     width: "100%",
     paddingVertical: 7.5,
-    color: colors.light1,
+    color: colors.light3,
   },
 });
 
